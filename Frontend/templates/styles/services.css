@@ -1,0 +1,22 @@
+.service-icon {
+    width: 50px; /* Adjust as needed */
+    height: 50px; /* Adjust as needed */
+    border-radius: 50%; /* Makes the image circular */
+    background-color: #2AC0A5; /* Green background */
+    padding: 10px; /* Space between image and green circle */
+    box-sizing: border-box; /* Ensures padding doesn't increase total size */
+    display: block; /* Makes it easier to center using margin auto */
+    margin: 0 auto 15px; /* Centers horizontally and adds space below */
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: #f8f9fa; /* This is the default background color for `.bg-light` in Bootstrap */
+}
+
+main {
+    flex: 1;
+    background-color: transparent; /* Ensure that the body's background color shows through */
+}
