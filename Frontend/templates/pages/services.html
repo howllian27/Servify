@@ -193,20 +193,17 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-          let buttons = document.querySelectorAll(".toggle-button");
-      
-          buttons.forEach(function (button) {
-            button.addEventListener("click", function (event) {
-              event.preventDefault(); // Prevent the link action
-      
-              if (this.classList.contains("selected-service")) {
-                this.classList.remove("selected-service");
-              } else {
-                this.classList.add("selected-service");
-              }
+            let buttons = document.querySelectorAll(".toggle-button");
+            buttons.forEach(function (button) {
+                button.addEventListener("click", function (event) {
+                    event.preventDefault(); // Prevent the link action
+                    // Deselect all other services
+                    buttons.forEach((btn) => btn.classList.remove("selected-service"));
+                    // Select the clicked service
+                    this.classList.add("selected-service");
+                    });
+                });
             });
-          });
-        });
-      </script>
+    </script>
 </body>
 </html>
