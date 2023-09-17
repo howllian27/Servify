@@ -9,6 +9,18 @@
     margin: 0 auto 15px; /* Centers horizontally and adds space below */
 }
 
+
+.selected-service {
+    background-color: #1E8F7D;
+    color: #f8f9fa;
+    border: 2px solid #2AC0A5;
+}
+
+.next-button {
+    background-color: #2AC0A5;
+    width: 150px;
+}
+
 body {
     display: flex;
     flex-direction: column;

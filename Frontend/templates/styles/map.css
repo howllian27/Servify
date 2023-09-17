@@ -1,0 +1,9 @@
+#map {
+    height: 400px;
+    width: 100%;
+}
+
+.confirm-button {
+    background-color: #2AC0A5;
+    width: 300px;
+}

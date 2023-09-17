@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Services</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../styles/index.css">
+    <link rel="stylesheet" href="../styles/services.css">
+    <link rel="stylesheet" href="../styles/request.css">
+    <link rel="stylesheet" href="../styles/map.css">
+</head>
+<body>
+    <nav class="navbar bg-body-tertiary">
+    <div class="container-fluid fixed-top" style="background-color: #2AC0A5;  padding: 10px;">
+        <a class="navbar-brand" style="color: white" href="./index.html">
+            <b>Servify</b>
+        <img src="../../images/header.png" alt="Logo" width="30" height="24" class="d-inline-block align-text-top">
+        </a>
+    </div>
+    </nav>  
+
+    <main>
+        <section class="bg-light py-5">
+            <h2 class="text-center mt-5">Your Service Provider is on the way!</h2>
+
+            <div class="row mt-4 content-box">
+                <!-- Google Maps Container -->
+                <div id="map"></div>
+            </div>
+
+            <div class="text-center">
+                <a href="./confirmation.html" class="btn btn-success confirm-button"><b>Service Provider Arrived</b></a>
+              </div>
+        </section>
+    </main>
+
+
+    <footer class="bg-dark text-white">
+        <div class="container-fluid" style="padding: 5px ;">
+            <div>
+                <h5 class="text-center"><b>Servify</b></h5>
+                <p class="text-center"><i>Your one-stop solution for professional services.</i></p>
+            </div>
+        </div>
+    </footer>
+  
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAnSoZr9Bm97EohSU7s3jhtaK2_hdYdX_o&callback=initMap"></script>
+    <script>
+        function initMap() {
+            const singapore = { lat: 1.3521, lng: 103.8198 };
+            const map = new google.maps.Map(document.getElementById('map'), {
+                zoom: 12,
+                center: singapore,
+            });
+            const marker = new google.maps.Marker({
+                position: singapore,
+                map: map,
+            });
+        }
+    </script>
+
+    
+</body>
+</html>
