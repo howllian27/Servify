@@ -7,6 +7,8 @@
     border-radius: 10px;  /* rounded corners */
     padding: 20px;  /* space inside the box */
     margin: 20px 0;  /* space outside the box */
+    display: flex;
+    flex-wrap: wrap;
 }
 .service-btn:hover {
     background-color: #2A80A5;
