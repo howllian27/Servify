@@ -1,12 +1,12 @@
 document.getElementById("imageUpload").addEventListener("change", function() {
-const file = this.files[0];
-if (file) {
-    const reader = new FileReader();
-    reader.onload = function(event) {
-        document.getElementById("imagePreview").innerHTML = `<img src="${event.target.result}" alt="Uploaded Image">`;
+    const file = this.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(event) {
+            document.getElementById("imagePreview").innerHTML = `<img src="${event.target.result}" alt="Uploaded Image">`;
+        }
+        reader.readAsDataURL(file);
     }
-    reader.readAsDataURL(file);
-}
 });
 
 document.getElementById("uploadButton").addEventListener("click", function() {
@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", function () {
     button.addEventListener("click", function (event) {
         event.preventDefault(); // Prevent the link action
         timingButtons.forEach((btn) => btn.classList.remove("selected-timing"));
-    this.classList.add("selected-timing");
+        this.classList.add("selected-timing");
     });
     });
 });
