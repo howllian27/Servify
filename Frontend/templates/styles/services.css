@@ -9,6 +9,9 @@
     margin: 0 auto 15px; /* Centers horizontally and adds space below */
 }
 
+.card {
+    height: 100%; /* Making sure that all the service boxes have same height */
+}
 
 .selected-service {
     background-color: #1E8F7D;
