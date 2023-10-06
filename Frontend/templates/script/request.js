@@ -70,23 +70,29 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 });
-  document.addEventListener('DOMContentLoaded', function () {
+
+document.addEventListener('DOMContentLoaded', function () {
     const radioButtons = document.querySelectorAll('input[name="timing"]');
-    const submitButton = document.getElementById('submitButton');
+    const submitButton = document.getElementById('submitBtn');
 
     function updateSubmitButton() {
-      // Use the Array.from method instead of spreading (...) the NodeList
-      const isAnyRadioButtonChecked = Array.from(radioButtons).some(rb => rb.checked);
-      submitButton.disabled = !isAnyRadioButtonChecked;
+        const isAnyRadioButtonChecked = Array.from(radioButtons).some(rb => rb.checked);
+        if (isAnyRadioButtonChecked) {
+            submitButton.classList.remove('disabled-link');
+            submitButton.removeAttribute('disabled');
+        } else {
+            submitButton.classList.add('disabled-link');
+            submitButton.setAttribute('disabled', 'disabled');
+        }
     }
 
     radioButtons.forEach(radioButton => {
-      radioButton.addEventListener('change', updateSubmitButton);
+        radioButton.addEventListener('change', updateSubmitButton);
     });
 
     // Initial state
     updateSubmitButton();
-  });
-</script>
+});
+
 
   
