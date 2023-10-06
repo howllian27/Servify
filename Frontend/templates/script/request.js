@@ -70,7 +70,6 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 });
-<script>
   document.addEventListener('DOMContentLoaded', function () {
     const radioButtons = document.querySelectorAll('input[name="timing"]');
     const submitButton = document.getElementById('submitButton');
