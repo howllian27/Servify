@@ -52,10 +52,20 @@
                             </h3>  
                           </div>
                           <div class="col-12 col-md-6 mt-5 text-center d-flex flex-column justify-content-center">
-                            <button class="btn btn-outline-success timing-button"><b>8am to 11am</b></button>
-                            <button class="btn btn-outline-success timing-button"><b>12pm to 3pm</b></button>
-                            <button class="btn btn-outline-success timing-button"><b>4pm to 7pm</b></button>
+                            <label>
+                              <input type="radio" name="timing" value="8am to 11am" required>
+                              <span class="btn btn-outline-success timing-button"><b>8am to 11am</b></span>
+                            </label>
+                            <label>
+                              <input type="radio" name="timing" value="12pm to 3pm" required>
+                              <span class="btn btn-outline-success timing-button"><b>12pm to 3pm</b></span>
+                            </label>
+                            <label>
+                              <input type="radio" name="timing" value="4pm to 7pm" required>
+                              <span class="btn btn-outline-success timing-button"><b>4pm to 7pm</b></span>
+                            </label>
                           </div>
+                          <button id="submitButton" type="submit" disabled>Submit</button>
                       </div>
                   </div>
               </div>
