@@ -1,6 +1,5 @@
 {
-    "routes": [
-      { "src": "^/$", "dest": "/Frontend/templates/pages/homepage.html" }
-    ]
-  }
-  
+  "rewrites": [
+    { "source": "/", "destination": "/Frontend/templates/pages/homepage.html" }
+  ]
+}
