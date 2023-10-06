@@ -70,4 +70,20 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 });
+document.addEventListener('DOMContentLoaded', function () {
+  const radioButtons = document.querySelectorAll('input[name="timing"]');
+  const submitButton = document.getElementById('submitButton');
+
+  function updateSubmitButton() {
+    const isAnyRadioButtonChecked = [...radioButtons].some(rb => rb.checked);
+    submitButton.disabled = !isAnyRadioButtonChecked;
+  }
+
+  radioButtons.forEach(radioButton => {
+    radioButton.addEventListener('change', updateSubmitButton);
+  });
+
+  // Initial state
+  updateSubmitButton();
+});
   
