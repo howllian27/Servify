@@ -72,27 +72,24 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 document.addEventListener('DOMContentLoaded', function () {
-    const radioButtons = document.querySelectorAll('input[name="timing"]');
-    const submitButton = document.getElementById('submitBtn');
+  const timingButtons = document.querySelectorAll('.timing-button');
+  const submitButton = document.getElementById('submitBtn'); // Updated the ID
 
-    function updateSubmitButton() {
-        const isAnyRadioButtonChecked = Array.from(radioButtons).some(rb => rb.checked);
-        if (isAnyRadioButtonChecked) {
-            submitButton.classList.remove('disabled-link');
-            submitButton.removeAttribute('disabled');
-        } else {
-            submitButton.classList.add('disabled-link');
-            submitButton.setAttribute('disabled', 'disabled');
-        }
-    }
+  function updateSubmitButton() {
+    const isAnyButtonSelected = [...timingButtons].some(button => button.classList.contains('selected-timing'));
+    submitButton.disabled = !isAnyButtonSelected;
+  }
 
-    radioButtons.forEach(radioButton => {
-        radioButton.addEventListener('change', updateSubmitButton);
+  timingButtons.forEach(timingButton => {
+    timingButton.addEventListener('click', function (event) {
+      event.preventDefault();
+      timingButtons.forEach(button => button.classList.remove('selected-timing'));
+      this.classList.add('selected-timing');
+      updateSubmitButton();
     });
+  });
 
-    // Initial state
-    updateSubmitButton();
+  // Initial state
+  updateSubmitButton();
 });
-
-
   
