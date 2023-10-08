@@ -1,11 +1,9 @@
-// Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+import { getFirestore } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-analytics.js";
+import { collection, where, query, getDocs } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
 
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+
 const firebaseConfig = {
   apiKey: "AIzaSyBqszrUVSBQ0wJjWzJ6xgUmDcZ18e5SLRc",
   authDomain: "servify-7779b.firebaseapp.com",
@@ -19,6 +17,7 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
+const db = getFirestore(app);
 
 
 // Set up your event listeners
@@ -31,16 +30,21 @@ document.addEventListener("DOMContentLoaded", function () {
             this.classList.add("selected-service");
 
             const selectedService = this.textContent.trim();
+            console.log("Selected Service:", selectedService);
+
             findMatchingUsers(selectedService);
         });
     });
 });
 
 function findMatchingUsers(service) {
-    db.collection("users")
-        .where("User_details.Type of service", "==", service)
-        .where("user_type", "==", "service provider")
-        .get()
+    const q = query(
+        collection(db, "users"),
+        where("User_details.Type of service", "==", service),
+        where("user_type", "==", "service provider")
+    );
+
+    getDocs(q)
         .then((querySnapshot) => {
             querySnapshot.forEach((doc) => {
                 console.log(doc.id, " => ", doc.data());
