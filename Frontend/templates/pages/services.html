@@ -194,17 +194,60 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            let buttons = document.querySelectorAll(".toggle-button");
-            buttons.forEach(function (button) {
-                button.addEventListener("click", function (event) {
-                    event.preventDefault(); // Prevent the link action
-                    // Deselect all other services
-                    buttons.forEach((btn) => btn.classList.remove("selected-service"));
-                    // Select the clicked service
-                    this.classList.add("selected-service");
-                    });
-                });
+        let buttons = document.querySelectorAll(".toggle-button");
+        let selectedServiceName = '';  // Variable to store the selected service name
+
+        buttons.forEach(function (button) {
+            button.addEventListener("click", function (event) {
+                event.preventDefault(); // Prevent the link action
+
+                // Deselect all other services
+                buttons.forEach((btn) => btn.classList.remove("selected-service"));
+
+                // Select the clicked service
+                this.classList.add("selected-service");
+
+                // Extract and store the service name from the clicked button
+                selectedServiceName = this.textContent.trim();
             });
+        });
+
+        // Attach an event listener to the "NEXT" button
+        document.querySelector(".next-button").addEventListener("click", function(event) {
+            // If a service is selected, send it to the backend
+            if (selectedServiceName) {
+                sendDataToBackend(selectedServiceName);
+            } else {
+                console.error("No service selected!");
+            }
+        });
+    });
+
+    async function sendDataToBackend(serviceName) {
+        try {
+            let data = {
+                service: serviceName
+            };
+
+            let response = await fetch('YOUR_BACKEND_ENDPOINT_HERE', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+
+            if (response.ok) {
+                let result = await response.json();
+                console.log(result);
+            } else {
+                console.error("Failed to send data", response.statusText);
+            }
+        } catch (error) {
+            console.error("Error occurred:", error);
+        }
+    }
+
     </script>
     <!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
     <script type="module" src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>

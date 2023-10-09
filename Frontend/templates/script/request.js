@@ -33,7 +33,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 //Javascript for the loading button
 document.addEventListener("DOMContentLoaded", function () {
-    const nextButton = document.querySelector(".next-button");
+    const nextButton = document.getElementById("submitButton");
     const loadingPopup = document.getElementById("loading-popup");
 
     nextButton.addEventListener("click", function(event) {
