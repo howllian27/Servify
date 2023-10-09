@@ -28,15 +28,30 @@ document.addEventListener("DOMContentLoaded", function () {
             event.preventDefault();
             buttons.forEach((btn) => btn.classList.remove("selected-service"));
             this.classList.add("selected-service");
-
-            const selectedService = this.textContent.trim();
-            console.log("Selected Service:", selectedService);
-
-            findMatchingUsers(selectedService);
         });
+    });
+
+    // Add event listener to the "NEXT" button
+    let nextButton = document.querySelector(".next-button");
+    nextButton.addEventListener("click", function(event) {
+        event.preventDefault();
+        let selectedButton = document.querySelector(".selected-service");
+        if (selectedButton) {
+            const selectedService = selectedButton.textContent.trim();
+            console.log("Selected Service:", selectedService);
+            findMatchingUsers(selectedService);
+        } else {
+            console.log("No service selected.");
+        }
     });
 });
 
+// timer
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+  
+// Find Matching Service Providers
 function findMatchingUsers(service) {
     const q = query(
         collection(db, "users"),
@@ -46,9 +61,24 @@ function findMatchingUsers(service) {
 
     getDocs(q)
         .then((querySnapshot) => {
+            let results = [];
             querySnapshot.forEach((doc) => {
-                console.log(doc.id, " => ", doc.data());
+                let data = doc.data();
+                let serviceProviderName = data.name; // Assuming 'name' is the field for the service provider's name
+                let result = {
+                    "service_provider_name": serviceProviderName,
+                    "service_requested": service,
+                    "time": "",
+                    "location": "(1.385782, 103.8800001)",
+                    "picture": ""
+                };
+                results.push(result);
             });
+            console.log(results); // This will log the array of JSON objects
+            // If you want to use this data in another JS file, you can set it to a global variable or use other methods like LocalStorage, etc.
+            window.serviceProviderData = results; // Setting to a global variable
+            localStorage.setItem('serviceProviderData', JSON.stringify(results));
+            sleep(3500).then(() => { window.location.href = "./request.html"; });
         })
         .catch((error) => {
             console.log("Error getting documents: ", error);

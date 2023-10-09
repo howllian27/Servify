@@ -13,6 +13,11 @@ document.getElementById("uploadButton").addEventListener("click", function() {
     document.getElementById("imageUpload").click();
 });
 
+document.addEventListener("DOMContentLoaded", function () {
+    let serviceProviderData = JSON.parse(localStorage.getItem('serviceProviderData')); // Retrieve the data from localStorage
+    console.log(serviceProviderData); // This should log the array of JSON objects if the first script has run and stored the data
+});
+
 
 document.addEventListener("DOMContentLoaded", function () {
     let timingButtons = document.querySelectorAll(".timing-button");
@@ -44,6 +49,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
+//Auto time slot calculator
 document.addEventListener("DOMContentLoaded", function () {
     let timingButtons = document.querySelectorAll(".timing-button");
 
@@ -71,6 +77,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
+// Submit button
 document.addEventListener('DOMContentLoaded', function () {
   const timingButtons = document.querySelectorAll('.timing-button');
   const submitButton = document.getElementById('submitBtn'); // Updated the ID
@@ -92,4 +99,40 @@ document.addEventListener('DOMContentLoaded', function () {
   // Initial state
   updateSubmitButton();
 });
-  
+
+// Send JSON Data
+document.addEventListener("DOMContentLoaded", function () {
+    const submitButton = document.getElementById('submitBtn');
+
+    submitButton.addEventListener('click', function (event) {
+        event.preventDefault();
+
+        // Get selected service
+        const selectedServiceElement = document.querySelector('.selected-service');
+        const serviceRequested = selectedServiceElement ? selectedServiceElement.textContent.trim() : "";
+
+        // Get selected time
+        const selectedTimingElement = document.querySelector('.selected-timing');
+        const selectedTime = selectedTimingElement ? selectedTimingElement.textContent.trim() : "";
+
+        // Get uploaded image
+        const imageElement = document.getElementById("imagePreview").querySelector("img");
+        const uploadedImage = imageElement ? imageElement.src : "";
+
+        // Get service provider name from local storage
+        const serviceProviderName = localStorage.getItem("serviceProviderData");
+
+        // Update the result JSON
+        const result = {
+            "service_provider_name": serviceProviderName,
+            "service_requested": serviceRequested,
+            "time": selectedTime,
+            "location": "",
+            "picture": uploadedImage
+        };
+
+        console.log(result); // You can see the updated result in the console
+
+        // TODO: You can now send this result to your server or do whatever you want with it
+    });
+});
