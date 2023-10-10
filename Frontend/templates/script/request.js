@@ -99,6 +99,26 @@ document.addEventListener('DOMContentLoaded', function () {
   // Initial state
   updateSubmitButton();
 });
+<script>
+  // Get references to the radio buttons and the submit button
+  const radioButtons = document.querySelectorAll('input[type="radio"]');
+  const submitButton = document.getElementById('submitButton');
+
+  // Function to check if any radio button is selected
+  function checkRadioButtons() {
+    const isAnyRadioButtonSelected = Array.from(radioButtons).some((radio) => radio.checked);
+    submitButton.disabled = !isAnyRadioButtonSelected;
+  }
+
+  // Add event listeners to the radio buttons
+  radioButtons.forEach((radioButton) => {
+    radioButton.addEventListener('change', checkRadioButtons);
+  });
+
+  // Disable the submit button by default
+  submitButton.disabled = true;
+</script>
+
 
 // timer
 function sleep(ms) {
