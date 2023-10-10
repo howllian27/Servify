@@ -100,6 +100,11 @@ document.addEventListener('DOMContentLoaded', function () {
   updateSubmitButton();
 });
 
+// timer
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 // Send JSON Data
 document.addEventListener("DOMContentLoaded", function () {
     const submitButton = document.getElementById('submitBtn');
@@ -134,5 +139,6 @@ document.addEventListener("DOMContentLoaded", function () {
         console.log(result); // You can see the updated result in the console
 
         // TODO: You can now send this result to your server or do whatever you want with it
+        localStorage.setItem('serviceProviderData', JSON.stringify(results));
     });
 });

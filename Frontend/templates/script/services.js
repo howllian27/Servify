@@ -65,9 +65,11 @@ function findMatchingUsers(service) {
             querySnapshot.forEach((doc) => {
                 let data = doc.data();
                 let serviceProviderName = data.name; // Assuming 'name' is the field for the service provider's name
+                let serviceProviderEmail = data.email;
                 let result = {
                     "service_provider_name": serviceProviderName,
                     "service_requested": service,
+                    "email": serviceProviderEmail,
                     "time": "",
                     "location": "(1.385782, 103.8800001)",
                     "picture": ""
