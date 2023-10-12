@@ -1,3 +1,5 @@
+emailjs.init("howllian27");
+
 document.getElementById("imageUpload").addEventListener("change", function() {
     const file = this.files[0];
     if (file) {
@@ -30,24 +32,6 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
-
-//Javascript for the loading button
-document.addEventListener("DOMContentLoaded", function () {
-    const nextButton = document.getElementById("submitButton");
-    const loadingPopup = document.getElementById("loading-popup");
-
-    nextButton.addEventListener("click", function(event) {
-    event.preventDefault(); // Prevent the link action
-    loadingPopup.style.display = "flex"; // Show the loading popup
-
-    //change this such that only when there is serviceprovider acceptance then move to next page
-    setTimeout(function() {
-    // Hide the loading popup and navigate to map.html after 2 seconds
-    loadingPopup.style.display = "none";
-    window.location.href = "./map.html";
-    }, 2000);
-    });
-});
 
 //Auto time slot calculator
 document.addEventListener("DOMContentLoaded", function () {
@@ -99,26 +83,24 @@ document.addEventListener('DOMContentLoaded', function () {
   // Initial state
   updateSubmitButton();
 });
-<script>
-  // Get references to the radio buttons and the submit button
-  const radioButtons = document.querySelectorAll('input[type="radio"]');
-  const submitButton = document.getElementById('submitButton');
 
-  // Function to check if any radio button is selected
-  function checkRadioButtons() {
-    const isAnyRadioButtonSelected = Array.from(radioButtons).some((radio) => radio.checked);
-    submitButton.disabled = !isAnyRadioButtonSelected;
-  }
+// Get references to the radio buttons and the submit button
+const radioButtons = document.querySelectorAll('input[type="radio"]');
+const submitButton = document.getElementById('submitButton');
 
-  // Add event listeners to the radio buttons
-  radioButtons.forEach((radioButton) => {
-    radioButton.addEventListener('change', checkRadioButtons);
-  });
+// Function to check if any radio button is selected
+function checkRadioButtons() {
+const isAnyRadioButtonSelected = Array.from(radioButtons).some((radio) => radio.checked);
+submitButton.disabled = !isAnyRadioButtonSelected;
+}
 
-  // Disable the submit button by default
-  submitButton.disabled = true;
-</script>
+// Add event listeners to the radio buttons
+radioButtons.forEach((radioButton) => {
+radioButton.addEventListener('change', checkRadioButtons);
+});
 
+// Disable the submit button by default
+submitButton.disabled = true;
 
 // timer
 function sleep(ms) {
@@ -127,38 +109,57 @@ function sleep(ms) {
 
 // Send JSON Data
 document.addEventListener("DOMContentLoaded", function () {
-    const submitButton = document.getElementById('submitBtn');
+    const submitButton = document.getElementById('submitButton');
 
     submitButton.addEventListener('click', function (event) {
         event.preventDefault();
 
-        // Get selected service
-        const selectedServiceElement = document.querySelector('.selected-service');
-        const serviceRequested = selectedServiceElement ? selectedServiceElement.textContent.trim() : "";
+        // Retrieve the data from localStorage
+        let serviceProviderData = JSON.parse(localStorage.getItem('serviceProviderData'));
 
-        // Get selected time
-        const selectedTimingElement = document.querySelector('.selected-timing');
-        const selectedTime = selectedTimingElement ? selectedTimingElement.textContent.trim() : "";
+        // Update the data
+        if (serviceProviderData) {
+            // Extract the uploaded image source
+            const imageElement = document.getElementById("imagePreview").querySelector("img");
+            const uploadedImageSrc = imageElement ? imageElement.src : null;
+            console.log("Uploaded Image Source:", uploadedImageSrc);
 
-        // Get uploaded image
-        const imageElement = document.getElementById("imagePreview").querySelector("img");
-        const uploadedImage = imageElement ? imageElement.src : "";
+            // Extract the selected time
+            const selectedTimingElement = document.querySelector('input[name="timing"]:checked');
+            const selectedTime = selectedTimingElement ? selectedTimingElement.value : null;
+            console.log("Selected Time:", selectedTime);
 
-        // Get service provider name from local storage
-        const serviceProviderName = localStorage.getItem("serviceProviderData");
+            for (let provider of serviceProviderData) {
+                provider.time = selectedTime;
+                provider.picture = uploadedImageSrc;
 
-        // Update the result JSON
-        const result = {
-            "service_provider_name": serviceProviderName,
-            "service_requested": serviceRequested,
-            "time": selectedTime,
-            "location": "",
-            "picture": uploadedImage
-        };
+                emailjs.send("YOUR_SERVICE_NAME", "YOUR_TEMPLATE_NAME", {
+                    serviceProviderName: provider.name,
+                    userName: "XXX",  // Replace with the actual user's name
+                    serviceType: provider.service_requested,  // Replace with the actual service type
+                    selectedTime: selectedTime,
+                    uploadedImageSrc: uploadedImageSrc
+                }).then(function(response) {
+                    console.log('Email sent successfully!', response.status, response.text);
+                }, function(error) {
+                    console.log('Failed to send the email.', error);
+                });
+            }
 
-        console.log(result); // You can see the updated result in the console
+            // Store updated data back in localStorage
+            localStorage.setItem('serviceProviderData', JSON.stringify(serviceProviderData));
 
-        // TODO: You can now send this result to your server or do whatever you want with it
-        localStorage.setItem('serviceProviderData', JSON.stringify(results));
+            console.log("Updated Data:", serviceProviderData);
+        }
+
+        // Show loading popup
+        const loadingPopup = document.getElementById("loading-popup");
+        loadingPopup.style.display = "flex";
+
+        // Simulate loading time and then redirect
+        setTimeout(function() {
+            loadingPopup.style.display = "none";
+            window.location.href = "./map.html";
+        }, 3000);
     });
 });
