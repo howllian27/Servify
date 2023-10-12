@@ -1,4 +1,4 @@
-emailjs.init("howllian27");
+emailjs.init("oqcrp_MJgCRFTuFxL");
 
 document.getElementById("imageUpload").addEventListener("change", function() {
     const file = this.files[0];
@@ -133,9 +133,10 @@ document.addEventListener("DOMContentLoaded", function () {
                 provider.time = selectedTime;
                 provider.picture = uploadedImageSrc;
 
-                emailjs.send("YOUR_SERVICE_NAME", "YOUR_TEMPLATE_NAME", {
+                emailjs.send("service_ar6wyrk", "template_kj1pifv", {
                     serviceProviderName: provider.name,
-                    userName: "XXX",  // Replace with the actual user's name
+                    recipient_email: "chanwick27@gmail.com",
+                    userName: "Howell",  // Replace with the actual user's name
                     serviceType: provider.service_requested,  // Replace with the actual service type
                     selectedTime: selectedTime,
                     uploadedImageSrc: uploadedImageSrc
@@ -160,6 +161,6 @@ document.addEventListener("DOMContentLoaded", function () {
         setTimeout(function() {
             loadingPopup.style.display = "none";
             window.location.href = "./map.html";
-        }, 3000);
+        }, 80000);
     });
 });
