@@ -107,7 +107,35 @@ function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-// Send JSON Data
+// Function to generate a random latitude and longitude
+function getRandomLocationNearUser() {
+    const userLat = 1.3569175;
+    const userLng = 103.9772318;
+    const maxDistanceInDegrees = 10/111;  // Approximate value for 10km in degrees
+
+    return {
+        lat: userLat + (Math.random() * 2 - 1) * maxDistanceInDegrees,
+        lng: userLng + (Math.random() * 2 - 1) * maxDistanceInDegrees
+    };
+}
+
+
+// Function to calculate distance between two points using Haversine formula
+function calculateDistance(lat1, lon1, lat2, lon2) {
+    const R = 6371; // Radius of the Earth in kilometers
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLon = (lon2 - lon1) * Math.PI / 180;
+
+    const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+              Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+              Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    const distance = R * c;
+
+    return distance; // Returns distance in kilometers
+}
+
+// Send JSON Data and filter service providers based on location
 document.addEventListener("DOMContentLoaded", function () {
     const submitButton = document.getElementById('submitButton');
 
@@ -117,19 +145,42 @@ document.addEventListener("DOMContentLoaded", function () {
         // Retrieve the data from localStorage
         let serviceProviderData = JSON.parse(localStorage.getItem('serviceProviderData'));
 
-        // Update the data
-        if (serviceProviderData) {
-            // Extract the uploaded image source
-            const imageElement = document.getElementById("imagePreview").querySelector("img");
-            const uploadedImageSrc = imageElement ? imageElement.src : null;
-            console.log("Uploaded Image Source:", uploadedImageSrc);
+        // Assign random locations to each service provider
+        serviceProviderData.forEach(provider => {
+            const location = getRandomLocationNearUser();
+            provider.lat = location.lat;
+            provider.lng = location.lng;
+            console.log(`Service Provider: ${provider.name}, Location: (${provider.lat.toFixed(2)}, ${provider.lng.toFixed(2)})`);
+        });
 
-            // Extract the selected time
-            const selectedTimingElement = document.querySelector('input[name="timing"]:checked');
-            const selectedTime = selectedTimingElement ? selectedTimingElement.value : null;
-            console.log("Selected Time:", selectedTime);
+        // Get user's location
+        navigator.geolocation.getCurrentPosition(function(position) {
+            const userLocation = {
+                lat: position.coords.latitude,
+                lng: position.coords.longitude
+            };
+            console.log(`User's Location: (${userLocation.lat.toFixed(2)}, ${userLocation.lng.toFixed(2)})`);
 
-            for (let provider of serviceProviderData) {
+            // Filter service providers based on proximity
+            const MAX_DISTANCE = 10; // Maximum distance in kilometers
+            const nearbyProviders = serviceProviderData.filter(provider => {
+                const distance = calculateDistance(userLocation.lat, userLocation.lng, provider.lat, provider.lng);
+                console.log(`Service provider ${provider.name} is ${distance} away`)
+                return distance <= MAX_DISTANCE;
+            });
+
+            console.log("Nearby Providers:", nearbyProviders);
+
+            // Send emails to nearby service providers
+            nearbyProviders.forEach(provider => {
+                // Extract the uploaded image source
+                const imageElement = document.getElementById("imagePreview").querySelector("img");
+                const uploadedImageSrc = imageElement ? imageElement.src : null;
+
+                // Extract the selected time
+                const selectedTimingElement = document.querySelector('input[name="timing"]:checked');
+                const selectedTime = selectedTimingElement ? selectedTimingElement.value : null;
+
                 provider.time = selectedTime;
                 provider.picture = uploadedImageSrc;
 
@@ -145,22 +196,21 @@ document.addEventListener("DOMContentLoaded", function () {
                 }, function(error) {
                     console.log('Failed to send the email.', error);
                 });
-            }
+            });
 
             // Store updated data back in localStorage
             localStorage.setItem('serviceProviderData', JSON.stringify(serviceProviderData));
-
             console.log("Updated Data:", serviceProviderData);
-        }
 
-        // Show loading popup
-        const loadingPopup = document.getElementById("loading-popup");
-        loadingPopup.style.display = "flex";
+            // Show loading popup
+            const loadingPopup = document.getElementById("loading-popup");
+            loadingPopup.style.display = "flex";
 
-        // Simulate loading time and then redirect
-        setTimeout(function() {
-            loadingPopup.style.display = "none";
-            window.location.href = "./map.html";
-        }, 80000);
+            // Simulate loading time and then redirect
+            setTimeout(function() {
+                loadingPopup.style.display = "none";
+                window.location.href = "./map.html";
+            }, 50000);
+        });
     });
 });
