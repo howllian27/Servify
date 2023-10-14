@@ -119,21 +119,21 @@ function getRandomLocationNearUser() {
     };
 }
 
-
 // Function to calculate distance between two points using Haversine formula
 function calculateDistance(lat1, lon1, lat2, lon2) {
     const R = 6371; // Radius of the Earth in kilometers
-    const dLat = (lat2 - lat1) * Math.PI / 180;
-    const dLon = (lon2 - lon1) * Math.PI / 180;
 
-    const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-              Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
-              Math.sin(dLon / 2) * Math.sin(dLon / 2);
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    const distance = R * c;
+    // Convert degrees to radians
+    lat1 = lat1 * Math.PI / 180;
+    lon1 = lon1 * Math.PI / 180;
+    lat2 = lat2 * Math.PI / 180;
+    lon2 = lon2 * Math.PI / 180;
+
+    const distance = Math.acos(Math.sin(lat1) * Math.sin(lat2) + Math.cos(lat1) * Math.cos(lat2) * Math.cos(lon2 - lon1)) * R;
 
     return distance; // Returns distance in kilometers
 }
+
 
 // Send JSON Data and filter service providers based on location
 document.addEventListener("DOMContentLoaded", function () {
@@ -199,7 +199,8 @@ document.addEventListener("DOMContentLoaded", function () {
             });
 
             // Store updated data back in localStorage
-            localStorage.setItem('serviceProviderData', JSON.stringify(serviceProviderData));
+            localStorage.setItem('nearbyServiceProviderData', JSON.stringify(nearbyProviders));
+            localStorage.removeItem('serviceProviderData');
             console.log("Updated Data:", serviceProviderData);
 
             // Show loading popup
@@ -210,7 +211,7 @@ document.addEventListener("DOMContentLoaded", function () {
             setTimeout(function() {
                 loadingPopup.style.display = "none";
                 window.location.href = "./map.html";
-            }, 50000);
+            }, 5000);
         });
     });
 });
