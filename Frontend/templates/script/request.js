@@ -1,5 +1,6 @@
 emailjs.init("oqcrp_MJgCRFTuFxL");
 
+//Image Upload Functionality
 document.getElementById("imageUpload").addEventListener("change", function() {
     const file = this.files[0];
     if (file) {
@@ -15,12 +16,20 @@ document.getElementById("uploadButton").addEventListener("click", function() {
     document.getElementById("imageUpload").click();
 });
 
+// Retrieve Service Provider Data
 document.addEventListener("DOMContentLoaded", function () {
     let serviceProviderData = JSON.parse(localStorage.getItem('serviceProviderData')); // Retrieve the data from localStorage
     console.log(serviceProviderData); // This should log the array of JSON objects if the first script has run and stored the data
 });
 
+// Function to check if any time slot button is selected
+function checkTimeSlots() {
+    const timingButtons = document.querySelectorAll('.timing-button');
+    return Array.from(timingButtons).some((button) => button.classList.contains('selected-timing'));
+}
 
+
+// Time Slot Selection Functionality
 document.addEventListener("DOMContentLoaded", function () {
     let timingButtons = document.querySelectorAll(".timing-button");
     timingButtons.forEach(function (button) {
@@ -32,56 +41,57 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
-
-//Auto time slot calculator
+// Auto Time Slot Calculator
 document.addEventListener("DOMContentLoaded", function () {
-    let timingButtons = document.querySelectorAll(".timing-button");
-
-    // Get current hour
+    let timingLabels = document.querySelectorAll('label > input[name="timing"]');
+    
     let currentHour = new Date().getHours();
 
-    // Define your time slots based on the current hour
-    let timeSlots = [
-        `${currentHour}:00 to ${currentHour + 3}:00`,
-        `${currentHour + 3}:00 to ${currentHour + 6}:00`,
-        `${currentHour + 6}:00 to ${currentHour + 9}:00`,
-    ];
+    if (currentHour >= 0 && currentHour <= 21) {
+        let timeSlots = [
+            ` ${currentHour}:00 to ${currentHour + 3}:00`,
+            ` ${currentHour + 3}:00 to ${currentHour + 6}:00`,
+            ` ${currentHour + 6}:00 to ${currentHour + 9}:00`,
+        ];
 
-    // Assign the time slots to the buttons
-    timingButtons.forEach((button, index) => {
-        button.innerHTML = `<b>${timeSlots[index]}</b>`;
-    });
-
-    timingButtons.forEach(function (button) {
-        button.addEventListener("click", function (event) {
-        event.preventDefault(); // Prevent the link action
-        timingButtons.forEach((btn) => btn.classList.remove("selected-timing"));
-        this.classList.add("selected-timing");
+        timingLabels.forEach((radioButton, index) => {
+            let span = document.createElement('span');
+            span.textContent = timeSlots[index];
+            radioButton.insertAdjacentElement('afterend', span);
         });
-    });
+    }
 });
 
 // Submit button
 document.addEventListener('DOMContentLoaded', function () {
-  const timingButtons = document.querySelectorAll('.timing-button');
-  const submitButton = document.getElementById('submitBtn'); // Updated the ID
+    const timingButtons = document.querySelectorAll('input[name="timing"]');
+    const submitButton = document.getElementById('submitButton');
 
-  function updateSubmitButton() {
-    const isAnyButtonSelected = [...timingButtons].some(button => button.classList.contains('selected-timing'));
-    submitButton.disabled = !isAnyButtonSelected;
-  }
+    function updateSubmitButton() {
+        const isAnyButtonSelected = Array.from(timingButtons).some(button => button.checked);
+        if (isAnyButtonSelected) {
+            submitButton.removeAttribute('disabled');
+        } else {
+            submitButton.setAttribute('disabled', 'true');
+        }
+    }
 
-  timingButtons.forEach(timingButton => {
-    timingButton.addEventListener('click', function (event) {
-      event.preventDefault();
-      timingButtons.forEach(button => button.classList.remove('selected-timing'));
-      this.classList.add('selected-timing');
-      updateSubmitButton();
+    timingButtons.forEach(timingButton => {
+        timingButton.addEventListener('change', function () {
+            updateSubmitButton();
+        });
     });
-  });
 
-  // Initial state
-  updateSubmitButton();
+    // Check before proceeding
+    submitButton.addEventListener('click', function(event) {
+        const isAnyButtonSelected = Array.from(document.querySelectorAll('input[name="timing"]')).some(button => button.checked);
+        if (!isAnyButtonSelected) {
+            event.preventDefault();
+            alert('Please select at least one time slot before proceeding.');
+        }
+    });
+
+    updateSubmitButton();
 });
 
 // Get references to the radio buttons and the submit button

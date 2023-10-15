@@ -6,7 +6,18 @@ function loadScript() {
     document.head.appendChild(script);
 }
 
+
 window.onload = loadScript;
+
+function calculateDistance(lat1, lon1, lat2, lon2) {
+    const R = 6371; // Radius of the Earth in kilometers
+    lat1 = lat1 * Math.PI / 180;
+    lon1 = lon1 * Math.PI / 180;
+    lat2 = lat2 * Math.PI / 180;
+    lon2 = lon2 * Math.PI / 180;
+    const distance = Math.acos(Math.sin(lat1) * Math.sin(lat2) + Math.cos(lat1) * Math.cos(lat2) * Math.cos(lon2 - lon1)) * R;
+    return distance; // Returns distance in kilometers
+}
 
 function initMap() {
     const singapore = { lat: 1.3521, lng: 103.8198 };
@@ -15,38 +26,31 @@ function initMap() {
         center: singapore,
     });
 
-    // Define initial points for the service provider and the customer
-    let serviceProviderLocation = { lat: 1.3521, lng: 103.8198 }; // Update with actual coordinates
-    const customerLocation = { lat: 1.385782, lng: 103.8800055 }; // Update with actual coordinates
+    let serviceProviderLocation = { lat: 1.3521, lng: 103.8198 };
+    const customerLocation = { lat: 1.385782, lng: 103.8800055 };
 
     const serviceProviderMarker = new google.maps.Marker({
         position: serviceProviderLocation,
         map: map,
-        icon: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png' // Blue marker for service provider
+        icon: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png'
     });
 
     const customerMarker = new google.maps.Marker({
         position: customerLocation,
         map: map,
-        icon: 'http://maps.google.com/mapfiles/ms/icons/red-dot.png' // Red marker for customer
+        icon: 'http://maps.google.com/mapfiles/ms/icons/red-dot.png'
     });
 
-    // Create a directions service and a directions renderer
     const directionsService = new google.maps.DirectionsService();
-    const directionsRenderer = new google.maps.DirectionsRenderer();
-
-    // Set the directions renderer to use the map
+    const directionsRenderer = new google.maps.DirectionsRenderer({ suppressMarkers: true });
     directionsRenderer.setMap(map);
 
     function updateRoute() {
-        // Create a request object with the origin, destination, and travel mode
         const request = {
             origin: serviceProviderLocation,
             destination: customerLocation,
-            travelMode: 'DRIVING', // Change the travel mode as necessary
+            travelMode: 'DRIVING',
         };
-
-        // Get the route from the directions service and display it on the map using the directions renderer
         directionsService.route(request, function(response, status) {
             if (status === 'OK') {
                 directionsRenderer.setDirections(response);
@@ -56,20 +60,18 @@ function initMap() {
         });
     }
 
-    updateRoute(); // Initial route
+    updateRoute();
 
-    // Simulate real-time updates for the service provider's location
-    setInterval(function() {
-        // Fetch the updated location of the service provider (this is a mock, replace with actual data fetching)
-        serviceProviderLocation = {
-            lat: serviceProviderLocation.lat + (Math.random() - 0.5) * 0.01,
-            lng: serviceProviderLocation.lng + (Math.random() - 0.5) * 0.01
-        };
-
-        // Update the marker's position on the map
+    const interval = setInterval(() => {
+        serviceProviderLocation.lat += (customerLocation.lat - serviceProviderLocation.lat) * 0.01;
+        serviceProviderLocation.lng += (customerLocation.lng - serviceProviderLocation.lng) * 0.01;
         serviceProviderMarker.setPosition(serviceProviderLocation);
-
-        // Update the route on the map
         updateRoute();
-    }, 5000); // Update every 5 seconds
+
+        const distanceToCustomer = calculateDistance(serviceProviderLocation.lat, serviceProviderLocation.lng, customerLocation.lat, customerLocation.lng);
+        if (distanceToCustomer < 0.1) {
+            clearInterval(interval);
+            console.log("Service provider has reached the customer!");
+        }
+    }, 1000);
 }
