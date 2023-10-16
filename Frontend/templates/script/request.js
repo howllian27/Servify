@@ -266,7 +266,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     console.log("Loading popup should be hidden now.");
                 }
                 window.location.href = "./map.html";
-            }, 10000);
+            }, 5000);
         });
     });
 });
