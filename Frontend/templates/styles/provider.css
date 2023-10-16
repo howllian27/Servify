@@ -1,7 +1,7 @@
 .everything{
-    grid-area:1/1/1/1;
+    grid: area 1px / 1px / 1px / 1px;;
   }
-  .navbar-brand-container {
+.navbar-brand-container {
     margin-left: 20px;
 }
 
@@ -50,12 +50,11 @@
         font-size: 1.2em;
     }
 }
-.col-md-4{
-    
-}
+
 .accept-req{
     display: flex;
     margin-left: 20px;
+
 }
 
 
