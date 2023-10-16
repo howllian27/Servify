@@ -49,9 +49,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (currentHour >= 0 && currentHour <= 21) {
         let timeSlots = [
-            ` ${currentHour}:00 to ${currentHour + 3}:00`,
-            ` ${currentHour + 3}:00 to ${currentHour + 6}:00`,
-            ` ${currentHour + 6}:00 to ${currentHour + 9}:00`,
+            formatTimeSlot(currentHour, currentHour + 3),
+            formatTimeSlot(currentHour + 3, currentHour + 6),
+            formatTimeSlot(currentHour + 6, currentHour + 9),
         ];
 
         timingLabels.forEach((radioButton, index) => {
@@ -61,6 +61,13 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 });
+
+function formatTimeSlot(startHour, endHour) {
+    startHour = startHour % 24; // Ensure the hour is between 0 and 23
+    endHour = endHour % 24;     // Ensure the hour is between 0 and 23
+
+    return ` ${startHour}:00 to ${endHour}:00`;
+}
 
 // Submit button
 document.addEventListener('DOMContentLoaded', function () {
@@ -144,6 +151,23 @@ function calculateDistance(lat1, lon1, lat2, lon2) {
     return distance; // Returns distance in kilometers
 }
 
+// Get customer address 
+async function getReadableAddress(lat, lng) {
+    const apiKey = 'AIzaSyAUC_Uiorh11l8AXMjAoHnT4Qdu-f7sdBE'; // Replace with your API key
+    const apiUrl = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${apiKey}`;
+    
+    const response = await fetch(apiUrl);
+    const data = await response.json();
+
+    if (data.status === "OK") {
+        return data.results[0].formatted_address; // Return the first result
+    } else {
+        console.error("Failed to get address:", data.status);
+        return null;
+    }
+}
+
+
 
 // Send JSON Data and filter service providers based on location
 document.addEventListener("DOMContentLoaded", function () {
@@ -182,30 +206,33 @@ document.addEventListener("DOMContentLoaded", function () {
             console.log("Nearby Providers:", nearbyProviders);
 
             // Send emails to nearby service providers
-            nearbyProviders.forEach(provider => {
+            nearbyProviders.forEach(async provider => {
                 // Extract the uploaded image source
                 const imageElement = document.getElementById("imagePreview").querySelector("img");
                 const uploadedImageSrc = imageElement ? imageElement.src : null;
 
                 // Extract the selected time
                 const selectedTimingElement = document.querySelector('input[name="timing"]:checked');
-                const selectedTime = selectedTimingElement ? selectedTimingElement.value : null;
+                const selectedTime = selectedTimingElement ? selectedTimingElement.nextElementSibling.textContent : null; // Extracting the time from the adjacent <span> element
+
 
                 provider.time = selectedTime;
                 provider.picture = uploadedImageSrc;
 
+                const readableAddress = await getReadableAddress(userLocation.lat, userLocation.lng);
+
                 emailjs.send("service_ar6wyrk", "template_kj1pifv", {
-                    serviceProviderName: provider.name,
-                    recipient_email: "chanwick27@gmail.com",
-                    userName: "Howell",  // Replace with the actual user's name
-                    serviceType: provider.service_requested,  // Replace with the actual service type
+                    serviceProviderName: provider.service_provider_name,
+                    serviceType: provider.service_requested,
                     selectedTime: selectedTime,
-                    uploadedImageSrc: uploadedImageSrc
+                    userLocation: readableAddress,
+                    linkToDetailsPage: "https://yourwebsite.com/detailsPage" // Replace with the actual link to your details page
                 }).then(function(response) {
                     console.log('Email sent successfully!', response.status, response.text);
                 }, function(error) {
                     console.log('Failed to send the email.', error);
                 });
+                
             });
 
             // Store updated data back in localStorage
@@ -221,7 +248,7 @@ document.addEventListener("DOMContentLoaded", function () {
             setTimeout(function() {
                 loadingPopup.style.display = "none";
                 window.location.href = "./map.html";
-            }, 5000);
+            }, 10000);
         });
     });
 });
