@@ -1,23 +1,25 @@
-.everything{
-    grid-area: 1/1/1/1;
-
-  }
 .navbar-brand-container {
     margin-left: 20px;
 }
+
+.everything{
+    grid-area: 1/1/1/1;
+
+
+  }
 
 .green-box {
     background-color: #30e7c6;
     border-radius: 15px;
     padding: 20px;
-    max-width: 50%;
+    max-width: 800px;
     max-height: 700px; 
     margin-top:100px;
     margin-left:50px;
 }
 
 .green-box p {
-    margin: 0;
+    margin: 10px;
     font-size: 1.5em;
     font-weight: 500;
     text-align: left;
