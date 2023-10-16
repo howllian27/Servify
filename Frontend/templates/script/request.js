@@ -66,7 +66,11 @@ function formatTimeSlot(startHour, endHour) {
     startHour = startHour % 24; // Ensure the hour is between 0 and 23
     endHour = endHour % 24;     // Ensure the hour is between 0 and 23
 
-    return ` ${startHour}:00 to ${endHour}:00`;
+    // Format hours to always have two digits
+    const formattedStartHour = startHour.toString().padStart(2, '0');
+        const formattedEndHour = endHour.toString().padStart(2, '0');
+
+    return `${formattedStartHour}:00 to ${formattedEndHour}:00`;
 }
 
 // Submit button
@@ -176,6 +180,12 @@ document.addEventListener("DOMContentLoaded", function () {
     submitButton.addEventListener('click', function (event) {
         event.preventDefault();
 
+        const isAnyButtonSelected = Array.from(document.querySelectorAll('input[name="timing"]')).some(button => button.checked);
+        if (!isAnyButtonSelected) {
+            alert('Please select at least one time slot before proceeding.');
+            return;
+        }
+
         // Retrieve the data from localStorage
         let serviceProviderData = JSON.parse(localStorage.getItem('serviceProviderData'));
 
@@ -242,11 +252,19 @@ document.addEventListener("DOMContentLoaded", function () {
 
             // Show loading popup
             const loadingPopup = document.getElementById("loading-popup");
-            loadingPopup.style.display = "flex";
+            if (loadingPopup) {
+                loadingPopup.style.display = "flex";
+                console.log("Loading popup should be visible now.");
+            } else {
+                console.error("Couldn't find the loading popup element.");
+            }
 
             // Simulate loading time and then redirect
             setTimeout(function() {
-                loadingPopup.style.display = "none";
+                if (loadingPopup) {
+                    loadingPopup.style.display = "none";
+                    console.log("Loading popup should be hidden now.");
+                }
                 window.location.href = "./map.html";
             }, 10000);
         });
