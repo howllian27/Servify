@@ -4,9 +4,11 @@
   box-shadow: 0px 20px 50px rgba(29, 117, 101, 0.30);
   padding: 40px;
   border-radius: 5px;
-  margin-left: 40px ;
+  margin-left: 50px ;
 }
-
+.everything{
+  grid-area:1/1/1/1;
+}
 /* Media query to adjust the height for smaller screens */
 @media (max-width: 768px) {
   .card-like {
