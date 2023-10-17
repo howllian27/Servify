@@ -75,7 +75,7 @@ function initMap() {
                         pathPolyline = new google.maps.Polyline({
                             path: originalPath,
                             geodesic: true,
-                            strokeColor: '#FF0000',
+                            strokeColor: '#0000FF',
                             strokeOpacity: 1.0,
                             strokeWeight: 2
                         });
