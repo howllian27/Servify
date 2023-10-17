@@ -47,19 +47,17 @@ document.addEventListener("DOMContentLoaded", function () {
     
     let currentHour = new Date().getHours();
 
-    if (currentHour >= 0 && currentHour <= 21) {
-        let timeSlots = [
-            formatTimeSlot(currentHour, currentHour + 3),
-            formatTimeSlot(currentHour + 3, currentHour + 6),
-            formatTimeSlot(currentHour + 6, currentHour + 9),
-        ];
+    let timeSlots = [
+        formatTimeSlot(currentHour, currentHour + 3),
+        formatTimeSlot(currentHour + 3, currentHour + 6),
+        formatTimeSlot(currentHour + 6, currentHour + 9),
+    ];
 
-        timingLabels.forEach((radioButton, index) => {
-            let span = document.createElement('span');
-            span.textContent = timeSlots[index];
-            radioButton.insertAdjacentElement('afterend', span);
-        });
-    }
+    timingLabels.forEach((radioButton, index) => {
+        let span = document.createElement('span');
+        span.textContent = timeSlots[index];
+        radioButton.insertAdjacentElement('afterend', span);
+    });
 });
 
 function formatTimeSlot(startHour, endHour) {
@@ -130,14 +128,26 @@ function sleep(ms) {
 
 // Function to generate a random latitude and longitude
 function getRandomLocationNearUser() {
-    const userLat = 1.3569175;
-    const userLng = 103.9772318;
-    const maxDistanceInDegrees = 10/111;  // Approximate value for 10km in degrees
+    return new Promise((resolve, reject) => {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+                const userLat = position.coords.latitude;
+                const userLng = position.coords.longitude;
+                const maxDistanceInDegrees = 10/111;  // Approximate value for 10km in degrees
 
-    return {
-        lat: userLat + (Math.random() * 2 - 1) * maxDistanceInDegrees,
-        lng: userLng + (Math.random() * 2 - 1) * maxDistanceInDegrees
-    };
+                const randomLocation = {
+                    lat: userLat + (Math.random() * 2 - 1) * maxDistanceInDegrees,
+                    lng: userLng + (Math.random() * 2 - 1) * maxDistanceInDegrees
+                };
+
+                resolve(randomLocation);
+            }, function(error) {
+                reject(error);
+            });
+        } else {
+            reject(new Error("Geolocation is not supported by this browser."));
+        }
+    });
 }
 
 // Function to calculate distance between two points using Haversine formula
@@ -177,8 +187,17 @@ async function getReadableAddress(lat, lng) {
 document.addEventListener("DOMContentLoaded", function () {
     const submitButton = document.getElementById('submitButton');
 
-    submitButton.addEventListener('click', function (event) {
+    submitButton.addEventListener('click', async function (event) {
         event.preventDefault();
+
+        // Show loading popup
+        const loadingPopup = document.getElementById("loading-popup");
+        if (loadingPopup) {
+            loadingPopup.style.display = "flex";
+            console.log("Loading popup should be visible now.");
+        } else {
+            console.error("Couldn't find the loading popup element.");
+        }
 
         const isAnyButtonSelected = Array.from(document.querySelectorAll('input[name="timing"]')).some(button => button.checked);
         if (!isAnyButtonSelected) {
@@ -190,12 +209,12 @@ document.addEventListener("DOMContentLoaded", function () {
         let serviceProviderData = JSON.parse(localStorage.getItem('serviceProviderData'));
 
         // Assign random locations to each service provider
-        serviceProviderData.forEach(provider => {
-            const location = getRandomLocationNearUser();
+        for (let provider of serviceProviderData) { // <-- Use 'for...of' loop for async operations
+            const location = await getRandomLocationNearUser(); // <-- Use 'await' here
             provider.lat = location.lat;
             provider.lng = location.lng;
-            console.log(`Service Provider: ${provider.name}, Location: (${provider.lat.toFixed(2)}, ${provider.lng.toFixed(2)})`);
-        });
+            console.log(`Service Provider: ${provider.service_provider_name}, Location: (${provider.lat}, ${provider.lng})`);
+        }
 
         // Get user's location
         navigator.geolocation.getCurrentPosition(function(position) {
@@ -250,15 +269,6 @@ document.addEventListener("DOMContentLoaded", function () {
             localStorage.removeItem('serviceProviderData');
             console.log("Updated Data:", serviceProviderData);
 
-            // Show loading popup
-            const loadingPopup = document.getElementById("loading-popup");
-            if (loadingPopup) {
-                loadingPopup.style.display = "flex";
-                console.log("Loading popup should be visible now.");
-            } else {
-                console.error("Couldn't find the loading popup element.");
-            }
-
             // Simulate loading time and then redirect
             setTimeout(function() {
                 if (loadingPopup) {
@@ -266,7 +276,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     console.log("Loading popup should be hidden now.");
                 }
                 window.location.href = "./map.html";
-            }, 5000);
+            }, 2000);
         });
     });
 });
