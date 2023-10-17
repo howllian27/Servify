@@ -208,13 +208,26 @@ document.addEventListener("DOMContentLoaded", function () {
         // Retrieve the data from localStorage
         let serviceProviderData = JSON.parse(localStorage.getItem('serviceProviderData'));
 
-        // Assign random locations to each service provider
-        for (let provider of serviceProviderData) { // <-- Use 'for...of' loop for async operations
-            const location = await getRandomLocationNearUser(); // <-- Use 'await' here
-            provider.lat = location.lat;
-            provider.lng = location.lng;
+        // Create an array of promises for each provider
+        const locationPromises = serviceProviderData.map(async provider => {
+            const location = await getRandomLocationNearUser();
+            return {
+                ...provider,
+                lat: location.lat,
+                lng: location.lng
+            };
+        });
+
+        // Wait for all promises to resolve
+        const updatedProviders = await Promise.all(locationPromises);
+
+        // Update the serviceProviderData with the new locations
+        serviceProviderData = updatedProviders;
+
+        // Log the updated providers
+        serviceProviderData.forEach(provider => {
             console.log(`Service Provider: ${provider.service_provider_name}, Location: (${provider.lat}, ${provider.lng})`);
-        }
+        });
 
         // Get user's location
         navigator.geolocation.getCurrentPosition(function(position) {
@@ -276,7 +289,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     console.log("Loading popup should be hidden now.");
                 }
                 window.location.href = "./map.html";
-            }, 2000);
+            }, 5000);
         });
     });
 });
