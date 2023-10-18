@@ -42,3 +42,6 @@
         font-size: 1.2em;
     }
 }
+.custom-progress-bar {
+    background-color: #0DC7B1; /* Replace #ff5733 with your desired color code */
+  }

@@ -35,3 +35,6 @@ main {
     flex: 1;
     background-color: transparent; /* Ensure that the body's background color shows through */
 }
+.custom-progress-bar {
+    background-color: #0DC7B1; /* Replace #ff5733 with your desired color code */
+  }

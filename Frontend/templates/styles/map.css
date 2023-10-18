@@ -8,3 +8,6 @@
     width: 300px;
     max-width: 100%; /* Makes sure the button doesn't overflow on smaller screens */
 }
+.custom-progress-bar {
+    background-color: #0DC7B1; /* Replace #ff5733 with your desired color code */
+  }
