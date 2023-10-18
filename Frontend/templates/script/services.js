@@ -86,4 +86,3 @@ function findMatchingUsers(service) {
             console.log("Error getting documents: ", error);
         });
 }
-

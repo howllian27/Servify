@@ -1,3 +1,21 @@
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js";
+import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-analytics.js";
+import { getDatabase, ref, runTransaction, onValue } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-database.js";
+
+const firebaseConfig = {
+    apiKey: "AIzaSyCkp2U4ZVKiWTpQB-KQlCSsYzat3x8Ixmc",
+    authDomain: "servify-clicks.firebaseapp.com",
+    databaseURL: "https://servify-clicks-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "servify-clicks",
+    storageBucket: "servify-clicks.appspot.com",
+    messagingSenderId: "520072688967",
+    appId: "1:520072688967:web:86991d7762dfc0e05a0862",
+    measurementId: "G-GZBVJC33KP"
+};
+
+const app = initializeApp(firebaseConfig);
+const database = getDatabase(app);
+
 emailjs.init("oqcrp_MJgCRFTuFxL");
 
 //Image Upload Functionality
@@ -43,7 +61,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // Auto Time Slot Calculator
 document.addEventListener("DOMContentLoaded", function () {
-    let timingLabels = document.querySelectorAll('label > input[name="timing"]');
+    let timingSpans = document.querySelectorAll('.time-slot');
     
     let currentHour = new Date().getHours();
 
@@ -53,12 +71,11 @@ document.addEventListener("DOMContentLoaded", function () {
         formatTimeSlot(currentHour + 6, currentHour + 9),
     ];
 
-    timingLabels.forEach((radioButton, index) => {
-        let span = document.createElement('span');
+    timingSpans.forEach((span, index) => {
         span.textContent = timeSlots[index];
-        radioButton.insertAdjacentElement('afterend', span);
     });
 });
+
 
 function formatTimeSlot(startHour, endHour) {
     startHour = startHour % 24; // Ensure the hour is between 0 and 23
@@ -182,6 +199,22 @@ async function getReadableAddress(lat, lng) {
 }
 
 
+// Registering acceptance clicks
+const responsesRefAccepted = ref(database, 'responses/accepted');
+const responsesRefDeclined = ref(database, 'responses/declined');
+
+function hideLoadingScreen() {
+    const loadingPopup = document.getElementById("loading-popup");
+    if (loadingPopup) {
+        loadingPopup.style.display = "none";
+        console.log("Loading popup should be hidden now.");
+    } else {
+        console.error("Couldn't find the loading popup element.");
+    }
+
+    // Redirect to map.html
+    window.location.href = "./map.html";
+}
 
 // Send JSON Data and filter service providers based on location
 document.addEventListener("DOMContentLoaded", function () {
@@ -282,14 +315,12 @@ document.addEventListener("DOMContentLoaded", function () {
             localStorage.removeItem('serviceProviderData');
             console.log("Updated Data:", serviceProviderData);
 
-            // Simulate loading time and then redirect
-            setTimeout(function() {
-                if (loadingPopup) {
-                    loadingPopup.style.display = "none";
-                    console.log("Loading popup should be hidden now.");
-                }
-                window.location.href = "./map.html";
-            }, 5000);
+            onValue(responsesRefAccepted, (snapshot) => {
+                const value = snapshot.val();
+                console.log('Accepted responses:', value);
+                hideLoadingScreen();
+            });
+            
         });
     });
 });
