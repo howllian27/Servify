@@ -12,7 +12,7 @@ h2{
 }
 .line {
   padding: 500px;
-  border-bottom: 1px solid #2AC0A5;
+  border-bottom: 1px solid #3DDABE;
 }
 /* Media query to adjust the height for smaller screens */
 @media (max-width: 768px) {
