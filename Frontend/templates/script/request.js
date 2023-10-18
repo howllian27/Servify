@@ -39,43 +39,28 @@ document.addEventListener("DOMContentLoaded", function () {
     let serviceProviderData = JSON.parse(localStorage.getItem('serviceProviderData')); // Retrieve the data from localStorage
     console.log(serviceProviderData); // This should log the array of JSON objects if the first script has run and stored the data
 });
-
-// Function to check if any time slot button is selected
+// Function to check if any time slot radio button is selected
 function checkTimeSlots() {
-    const timingButtons = document.querySelectorAll('.timing-button');
-    return Array.from(timingButtons).some((button) => button.classList.contains('selected-timing'));
+    const timingRadios = document.querySelectorAll('.btn-check');
+    return Array.from(timingRadios).some((radio) => radio.checked);
 }
-
-
-// Time Slot Selection Functionality
-document.addEventListener("DOMContentLoaded", function () {
-    let timingButtons = document.querySelectorAll(".timing-button");
-    timingButtons.forEach(function (button) {
-    button.addEventListener("click", function (event) {
-        event.preventDefault(); // Prevent the link action
-        timingButtons.forEach((btn) => btn.classList.remove("selected-timing"));
-        this.classList.add("selected-timing");
-    });
-    });
-});
 
 // Auto Time Slot Calculator
 document.addEventListener("DOMContentLoaded", function () {
-    let timingSpans = document.querySelectorAll('.time-slot');
+    let timingLabels = document.querySelectorAll('.btn-group-vertical label');
     
     let currentHour = new Date().getHours();
 
     let timeSlots = [
-        formatTimeSlot(currentHour, currentHour + 3),
-        formatTimeSlot(currentHour + 3, currentHour + 6),
-        formatTimeSlot(currentHour + 6, currentHour + 9),
+        formatTimeSlot(currentHour, currentHour + 4),
+        formatTimeSlot(currentHour + 4, currentHour + 8),
+        formatTimeSlot(currentHour + 8, currentHour + 12),
     ];
 
-    timingSpans.forEach((span, index) => {
-        span.textContent = timeSlots[index];
+    timingLabels.forEach((label, index) => {
+        label.textContent = timeSlots[index];
     });
 });
-
 
 function formatTimeSlot(startHour, endHour) {
     startHour = startHour % 24; // Ensure the hour is between 0 and 23
@@ -83,10 +68,11 @@ function formatTimeSlot(startHour, endHour) {
 
     // Format hours to always have two digits
     const formattedStartHour = startHour.toString().padStart(2, '0');
-        const formattedEndHour = endHour.toString().padStart(2, '0');
+    const formattedEndHour = endHour.toString().padStart(2, '0');
 
     return `${formattedStartHour}:00 to ${formattedEndHour}:00`;
 }
+
 
 // Submit button
 document.addEventListener('DOMContentLoaded', function () {
