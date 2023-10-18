@@ -8,7 +8,9 @@
     display: block; /* Makes it easier to center using margin auto */
     margin: 0 auto 15px; /* Centers horizontally and adds space below */
 }
-
+h2 {
+    font-family: 'Poppins', sans-serif;
+}
 .card {
     height: 100%; /* Making sure that all the service boxes have same height */
 }
@@ -37,4 +39,11 @@ main {
 }
 .custom-progress-bar {
     background-color: #0DC7B1; /* Replace #ff5733 with your desired color code */
+  }
+  .green-line {
+    border: none;
+    background-color:#0DC7B1;
+    height: 4px; /* Adjust the height as needed for thickness */
+    width: 20%; /* Adjust the width as needed for length */
+    margin: 0 auto; /* Center the line horizontally */
   }

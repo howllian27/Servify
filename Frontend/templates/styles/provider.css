@@ -20,6 +20,13 @@ h1 {
     height
     
 }
+.green-line {
+  border: none;
+  background-color:#0DC7B1;
+  height: 4px; /* Adjust the height as needed for thickness */
+  width: 20%; /* Adjust the width as needed for length */
+  margin: 0 auto; /* Center the line horizontally */
+}
 
 
 
