@@ -20,6 +20,18 @@ console.log("Firebase initialized:", app);
 var database = getDatabase(app);
 
 document.addEventListener("DOMContentLoaded", function() {
+    const serviceRequested = localStorage.getItem('serviceRequested');
+    const timing = localStorage.getItem('timing');
+    const location = localStorage.getItem('location');
+
+    if (serviceRequested && timing && location) {
+        document.querySelector("h3:nth-child(2)").textContent = "Service Requested: " + serviceRequested;
+        document.querySelector("h3:nth-child(3)").textContent = "Timing: " + timing;
+        document.querySelector("h3:nth-child(4)").textContent = "Location: " + location;
+    }
+});
+
+document.addEventListener("DOMContentLoaded", function() {
     // Accept button
     const acceptButton = document.querySelector(".accept-req a.btn:nth-child(1)");
     if (!acceptButton) {
@@ -60,7 +72,3 @@ function registerClick(action) {
         console.error('Transaction failed:', error);
     });
 }
-
-
-
-

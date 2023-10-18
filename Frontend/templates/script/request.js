@@ -216,6 +216,23 @@ function hideLoadingScreen() {
     window.location.href = "./map.html";
 }
 
+// Global variable to store the initial count of accepted responses
+let initialAcceptedCount = null;
+
+// Function to monitor changes in the accepted responses count
+function monitorAcceptedResponses() {
+    const responsesRefAccepted = ref(database, 'responses/accepted');
+    onValue(responsesRefAccepted, (snapshot) => {
+        const currentCount = snapshot.val() || 0;
+        if (initialAcceptedCount === null) {
+            initialAcceptedCount = currentCount;
+        } else if (currentCount > initialAcceptedCount) {
+            console.log("The current count is " + currentCount);
+            hideLoadingScreen();
+        }
+    });
+}
+
 // Send JSON Data and filter service providers based on location
 document.addEventListener("DOMContentLoaded", function () {
     const submitButton = document.getElementById('submitButton');
@@ -315,12 +332,14 @@ document.addEventListener("DOMContentLoaded", function () {
             localStorage.removeItem('serviceProviderData');
             console.log("Updated Data:", serviceProviderData);
 
-            onValue(responsesRefAccepted, (snapshot) => {
-                const value = snapshot.val();
-                console.log('Accepted responses:', value);
-                hideLoadingScreen();
-            });
-            
+            // console.log(provider.service_requested, selectedTime, readableAddress);
+            // localStorage.setItem('serviceRequested', provider.service_requested);
+            // localStorage.setItem('timing', selectedTime);
+            // localStorage.setItem('location', readableAddress);
+
+
+            // Start monitoring accepted responses
+            monitorAcceptedResponses();
         });
     });
 });
