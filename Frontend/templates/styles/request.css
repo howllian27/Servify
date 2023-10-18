@@ -5,9 +5,14 @@
   padding: 40px;
   border-radius: 15px;
   margin-left: 50px ;
+  
 }
-.everything{
-  grid-area:1/1/1/1;
+h2{
+  font-family: 'Poppins', sans-serif;
+}
+.line {
+  padding: 500px;
+  border-bottom: 1px solid #2AC0A5;
 }
 /* Media query to adjust the height for smaller screens */
 @media (max-width: 768px) {
@@ -19,6 +24,10 @@
 h1 {
   font-weight: bold; /* Makes the text bolder */
   margin-bottom: 20px; /* Adds a 20px gap below the h1 */
+}
+
+.btn-group-vertical{
+  color: #2AC0A5;
 }
   
 .upload-button {
@@ -47,7 +56,7 @@ h1 {
 }
   
 .image-preview {
-    background-color: gray; /* Gray background when no image is uploaded */
+    background-color: rgb(172, 165, 165); /* Gray background when no image is uploaded */
     width: 100%;  /* You can set a fixed width */
     height: 200px;  /* Fixed height */
     display: flex;
