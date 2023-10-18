@@ -324,6 +324,11 @@ document.addEventListener("DOMContentLoaded", function () {
                 }, function(error) {
                     console.log('Failed to send the email.', error);
                 });
+
+                console.log(provider.service_requested, selectedTime, readableAddress);
+                localStorage.setItem('serviceRequested', provider.service_requested);
+                localStorage.setItem('timing', selectedTime);
+                localStorage.setItem('location', readableAddress);
                 
             });
 
@@ -331,11 +336,6 @@ document.addEventListener("DOMContentLoaded", function () {
             localStorage.setItem('nearbyServiceProviderData', JSON.stringify(nearbyProviders));
             localStorage.removeItem('serviceProviderData');
             console.log("Updated Data:", serviceProviderData);
-
-            // console.log(provider.service_requested, selectedTime, readableAddress);
-            // localStorage.setItem('serviceRequested', provider.service_requested);
-            // localStorage.setItem('timing', selectedTime);
-            // localStorage.setItem('location', readableAddress);
 
 
             // Start monitoring accepted responses
