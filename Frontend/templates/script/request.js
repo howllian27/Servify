@@ -4,7 +4,7 @@ import { getDatabase, ref, runTransaction, onValue } from "https://www.gstatic.c
 
 const firebaseConfig = {
     apiKey: "AIzaSyCkp2U4ZVKiWTpQB-KQlCSsYzat3x8Ixmc",
-    authDomain: "servify-clicks.firebaseapp.com",   
+    authDomain: "servify-clicks.firebaseapp.com",
     databaseURL: "https://servify-clicks-default-rtdb.asia-southeast1.firebasedatabase.app",
     projectId: "servify-clicks",
     storageBucket: "servify-clicks.appspot.com",
@@ -39,28 +39,43 @@ document.addEventListener("DOMContentLoaded", function () {
     let serviceProviderData = JSON.parse(localStorage.getItem('serviceProviderData')); // Retrieve the data from localStorage
     console.log(serviceProviderData); // This should log the array of JSON objects if the first script has run and stored the data
 });
-// Function to check if any time slot radio button is selected
+
+// Function to check if any time slot button is selected
 function checkTimeSlots() {
-    const timingRadios = document.querySelectorAll('.btn-check');
-    return Array.from(timingRadios).some((radio) => radio.checked);
+    const timingButtons = document.querySelectorAll('.timing-button');
+    return Array.from(timingButtons).some((button) => button.classList.contains('selected-timing'));
 }
+
+
+// Time Slot Selection Functionality
+document.addEventListener("DOMContentLoaded", function () {
+    let timingButtons = document.querySelectorAll(".timing-button");
+    timingButtons.forEach(function (button) {
+    button.addEventListener("click", function (event) {
+        event.preventDefault(); // Prevent the link action
+        timingButtons.forEach((btn) => btn.classList.remove("selected-timing"));
+        this.classList.add("selected-timing");
+    });
+    });
+});
 
 // Auto Time Slot Calculator
 document.addEventListener("DOMContentLoaded", function () {
-    let timingLabels = document.querySelectorAll('.btn-group-vertical label');
+    let timingSpans = document.querySelectorAll('.time-slot');
     
     let currentHour = new Date().getHours();
 
     let timeSlots = [
-        formatTimeSlot(currentHour, currentHour + 4),
-        formatTimeSlot(currentHour + 4, currentHour + 8),
-        formatTimeSlot(currentHour + 8, currentHour + 12),
+        formatTimeSlot(currentHour, currentHour + 3),
+        formatTimeSlot(currentHour + 3, currentHour + 6),
+        formatTimeSlot(currentHour + 6, currentHour + 9),
     ];
 
-    timingLabels.forEach((label, index) => {
-        label.textContent = timeSlots[index];
+    timingSpans.forEach((span, index) => {
+        span.textContent = timeSlots[index];
     });
 });
+
 
 function formatTimeSlot(startHour, endHour) {
     startHour = startHour % 24; // Ensure the hour is between 0 and 23
@@ -68,11 +83,10 @@ function formatTimeSlot(startHour, endHour) {
 
     // Format hours to always have two digits
     const formattedStartHour = startHour.toString().padStart(2, '0');
-    const formattedEndHour = endHour.toString().padStart(2, '0');
+        const formattedEndHour = endHour.toString().padStart(2, '0');
 
     return `${formattedStartHour}:00 to ${formattedEndHour}:00`;
 }
-
 
 // Submit button
 document.addEventListener('DOMContentLoaded', function () {
@@ -283,40 +297,57 @@ document.addEventListener("DOMContentLoaded", function () {
 
             console.log("Nearby Providers:", nearbyProviders);
 
-            // Send emails to nearby service providers
-            nearbyProviders.forEach(async provider => {
-                // Extract the uploaded image source
-                const imageElement = document.getElementById("imagePreview").querySelector("img");
-                const uploadedImageSrc = imageElement ? imageElement.src : null;
+            let flag = true;
 
-                // Extract the selected time
-                const selectedTimingElement = document.querySelector('input[name="timing"]:checked');
-                const selectedTime = selectedTimingElement ? selectedTimingElement.nextElementSibling.textContent : null; // Extracting the time from the adjacent <span> element
+            // Wrapping the logic inside an Immediately Invoked Function Expression (IIFE) to use async/await
+            (async function() {
 
+                for (let i = 0; i < nearbyProviders.length; i++) {
+                    const provider = nearbyProviders[i];
 
-                provider.time = selectedTime;
-                provider.picture = uploadedImageSrc;
+                    // Extract the uploaded image source
+                    const imageElement = document.getElementById("imagePreview").querySelector("img");
+                    const uploadedImageSrc = imageElement ? imageElement.src : null;
 
-                const readableAddress = await getReadableAddress(userLocation.lat, userLocation.lng);
+                    // Extract the selected time
+                    const selectedTimingElement = document.querySelector('input[name="timing"]:checked');
+                    const selectedTime = selectedTimingElement ? selectedTimingElement.nextElementSibling.textContent : null; 
 
-                emailjs.send("service_ar6wyrk", "template_kj1pifv", {
-                    serviceProviderName: provider.service_provider_name,
-                    serviceType: provider.service_requested,
-                    selectedTime: selectedTime,
-                    userLocation: readableAddress,
-                    linkToDetailsPage: "https://yourwebsite.com/detailsPage" // Replace with the actual link to your details page
-                }).then(function(response) {
-                    console.log('Email sent successfully!', response.status, response.text);
-                }, function(error) {
-                    console.log('Failed to send the email.', error);
-                });
+                    provider.time = selectedTime;
+                    provider.picture = uploadedImageSrc;
 
-                console.log(provider.service_requested, selectedTime, readableAddress);
-                localStorage.setItem('serviceRequested', provider.service_requested);
-                localStorage.setItem('timing', selectedTime);
-                localStorage.setItem('location', readableAddress);
-                
-            });
+                    // Assuming getReadableAddress returns a promise, you might want to await it as well.
+                    // If not, just remove the await.
+                    const readableAddress = await getReadableAddress(userLocation.lat, userLocation.lng);
+
+                    if (flag) {
+                        try {
+                            const response = await emailjs.send("service_ar6wyrk", "template_kj1pifv", {
+                                serviceProviderName: provider.service_provider_name,
+                                serviceType: provider.service_requested,
+                                selectedTime: selectedTime,
+                                userLocation: readableAddress,
+                                linkToDetailsPage: "http://127.0.0.1:5500/Frontend/templates/pages/provider.html"
+                            });
+
+                            flag = false;
+                            console.log('Email sent successfully!', response.status, response.text);
+                            console.log(provider.service_requested, selectedTime, readableAddress);
+                            localStorage.setItem('serviceRequested', provider.service_requested);
+                            localStorage.setItem('timing', selectedTime);
+                            localStorage.setItem('location', readableAddress);
+                            
+                            // Breaks out of the loop after sending the email once
+                            break;
+
+                        } catch (error) {
+                            console.log('Failed to send the email.', error);
+                        }
+                    }
+                }
+
+})();
+
 
             // Store updated data back in localStorage
             localStorage.setItem('nearbyServiceProviderData', JSON.stringify(nearbyProviders));
