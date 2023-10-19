@@ -1,0 +1,3 @@
+/images/*  /Frontend/images/:splat  200
+/script/*  /Frontend/templates/script/:splat  200
+/styles/*  /Frontend/templates/styles/:splat  200

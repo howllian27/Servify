@@ -1,0 +1,5 @@
+{
+  "rewrites": [
+    { "source": "/", "destination": "/Frontend/templates/pages/homepage.html" }
+  ]
+}
