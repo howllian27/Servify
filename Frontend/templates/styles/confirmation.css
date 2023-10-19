@@ -10,9 +10,10 @@
     background-color: #30e7c6;
     border-radius: 15px;
     padding: 20px;
-    max-width: 100%;
+    max-width: 95%;
     max-height: 200px; 
     overflow: hidden; 
+    margin-left: 10%;
 }
 
 .green-box p {
@@ -40,10 +41,12 @@
 
     .green-box p {
         font-size: 1.2em;
+        font-family: 'Poppins', sans-serif;
+        
     }
 }
 .custom-progress-bar {
-    background-color: #0DC7B1; /* Replace #ff5733 with your desired color code */
+    background-color: #0DC7B1; 
   }
   .green-line {
     border: none;
@@ -55,4 +58,5 @@
 h2{
     font-family: 'Poppins', sans-serif;
 }
+
   
