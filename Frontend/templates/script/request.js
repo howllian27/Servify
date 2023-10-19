@@ -4,7 +4,7 @@ import { getDatabase, ref, runTransaction, onValue } from "https://www.gstatic.c
 
 const firebaseConfig = {
     apiKey: "AIzaSyCkp2U4ZVKiWTpQB-KQlCSsYzat3x8Ixmc",
-    authDomain: "servify-clicks.firebaseapp.com",
+    authDomain: "servify-clicks.firebaseapp.com",   
     databaseURL: "https://servify-clicks-default-rtdb.asia-southeast1.firebasedatabase.app",
     projectId: "servify-clicks",
     storageBucket: "servify-clicks.appspot.com",
