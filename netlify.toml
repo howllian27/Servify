@@ -1,0 +1,14 @@
+[[redirects]]
+  from = "/images/*"
+  to = "/Frontend/images/:splat"
+  status = 200
+
+[[redirects]]
+  from = "/scripts/*"
+  to = "/Frontend/templates/scripts/:splat"
+  status = 200
+
+[[redirects]]
+  from = "/styles/*"
+  to = "/Frontend/templates/styles/:splat"
+  status = 200
