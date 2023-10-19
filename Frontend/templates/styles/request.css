@@ -134,3 +134,6 @@ h1 {
   width: 20%; /* Adjust the width as needed for length */
   margin: 0 auto; /* Center the line horizontally */
 }
+#uploadButton{
+  font-family: 'Poppins', sans-serif;
+}
