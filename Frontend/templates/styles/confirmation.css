@@ -52,4 +52,7 @@
     width: 20%; /* Adjust the width as needed for length */
     margin: 0 auto; /* Center the line horizontally */
   }
+h2{
+    font-family: 'Poppins', sans-serif;
+}
   
