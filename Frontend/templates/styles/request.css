@@ -29,6 +29,9 @@ h1 {
 .btn-group-vertical{
   color: #2AC0A5;
 }
+.btn-group-vertical{
+  user-select: none;
+}
   
 .upload-button {
     display: inline-block;
