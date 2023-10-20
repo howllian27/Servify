@@ -333,6 +333,7 @@ document.addEventListener("DOMContentLoaded", function () {
                             flag = false;
                             console.log('Email sent successfully!', response.status, response.text);
                             console.log(provider.service_requested, selectedTime, readableAddress);
+                            localStorage.setItem('serviceProviderName', provider.service_provider_name);
                             localStorage.setItem('serviceRequested', provider.service_requested);
                             localStorage.setItem('timing', selectedTime);
                             localStorage.setItem('location', readableAddress);
