@@ -32,8 +32,8 @@ function initMap() {
         navigator.geolocation.getCurrentPosition(function(position) {
             const userLat = position.coords.latitude;
             const userLng = position.coords.longitude;
-            let serviceProviderLocation = { lat: userLat, lng: userLng };
-            const customerLocation = getRandomLocationNearUser(userLat, userLng);
+            let serviceProviderLocation = getRandomLocationNearUser(userLat, userLng); // Set service provider to a random location near the user
+            const customerLocation = { lat: userLat, lng: userLng }; // Set customer to the user's location
 
             const map = new google.maps.Map(document.getElementById('map'), {
                 zoom: 12,
@@ -43,13 +43,13 @@ function initMap() {
             const serviceProviderMarker = new google.maps.Marker({
                 position: serviceProviderLocation,
                 map: map,
-                icon: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png'
+                icon: 'http://maps.google.com/mapfiles/ms/icons/red-dot.png' // Red marker for service provider
             });
 
             const customerMarker = new google.maps.Marker({
                 position: customerLocation,
                 map: map,
-                icon: 'http://maps.google.com/mapfiles/ms/icons/red-dot.png'
+                icon: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png' // Blue marker for customer
             });
 
             const directionsService = new google.maps.DirectionsService();
@@ -57,7 +57,7 @@ function initMap() {
             directionsRenderer.setMap(map);
             
             let originalPath = [];
-            let pathPolyline = null; // This will represent the path on the map
+            let pathPolyline = null; 
             let currentIndex = 0;
 
             function updateRoute() {
@@ -70,12 +70,12 @@ function initMap() {
                     if (status === 'OK') {
                         originalPath = response.routes[0].overview_path;
                         if (pathPolyline) {
-                            pathPolyline.setMap(null); // Remove the previous path from the map
+                            pathPolyline.setMap(null); 
                         }
                         pathPolyline = new google.maps.Polyline({
                             path: originalPath,
                             geodesic: true,
-                            strokeColor: '#0000FF',
+                            strokeColor: '#FF0000',
                             strokeOpacity: 1.0,
                             strokeWeight: 2
                         });
@@ -98,7 +98,7 @@ function initMap() {
                     currentIndex++;
 
                     const newPath = originalPath.slice(currentIndex);
-                    pathPolyline.setPath(newPath); // Update the path of the polyline
+                    pathPolyline.setPath(newPath); 
 
                     const distanceToCustomer = calculateDistance(serviceProviderLocation.lat, serviceProviderLocation.lng, customerLocation.lat, customerLocation.lng);
                     if (distanceToCustomer < 0.1) {
@@ -118,3 +118,4 @@ function initMap() {
         console.error("Geolocation is not supported by this browser.");
     }
 }
+

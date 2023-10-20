@@ -10,12 +10,12 @@ document.addEventListener("DOMContentLoaded", function () {
         document.querySelector(".green-box1 .text-container p:nth-child(2)").textContent = `Name: ${name}`;
     }
     if (serviceRequested) {
-        document.querySelector(".green-box2 .text-container p:nth-child(2)").textContent = `Service Requested: ${serviceRequested}`;
+        document.querySelector(".green-box2 .text-container p:nth-child(2)").textContent = `Service Requested: ${serviceRequested} `;
     }
     if (timing) {
         document.querySelector(".green-box2 .text-container p:nth-child(3)").textContent = `Time: ${timing}`;
     }
     if (location) {
-        document.querySelector(".green-box2 .text-container p:nth-child(4)").textContent = `Location: ${location}`;
+        document.querySelector(".green-box2 .text-container p:nth-child(4)").textContent = `Location: ${location} `;
     }
 });
