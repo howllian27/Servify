@@ -140,6 +140,8 @@ h1 {
 #uploadButton{
   font-family: 'Poppins', sans-serif;
 }
+
 #submitButton{
-  color:#3DDABE;
+  font-family: 'Poppins', sans-serif;
+  background-color: #0DC7B1;
 }
