@@ -10,19 +10,23 @@ body {
     height: 100vh;
 }
 
+.container {
+    padding-left: 0;  /* Remove left padding */
+    padding-right: 0; /* Remove right padding */
+}
 
 form {
-    width: 100%;
+    width: auto;
     max-width: 100%; 
 }
 
 
 #ex1 {
-    margin-top: 80px;
-    margin-left: 40px;
+    margin-left: 0;
     display: flex;
     justify-content: left;
 }
+
 
 
 .navbar {
@@ -85,12 +89,18 @@ form {
 }
 
 .img-fluid {
-    justify-content: right;
+    height: 100%;
+    object-fit: cover;
+    display: block;  /* Make the image a block element */
+    margin-left: auto;  /* Push the image to the right */
+    margin-right: 0;  /* No margin on the right */
+    width: 100%;
 }
 
 .tab-content {
-    max-width: 700px;
-    padding-left: 50px;
+    max-width: 100%;  /* Allow it to take the full width */
+    padding-left: 0; 
+    margin-left: 0;
 }
 
 
@@ -130,4 +140,21 @@ form input, form label, form button, form a {
 .form-check-input:checked {
     background-color: #2AC0A5;
     border-color: #2AC0A5;
+}
+
+.row > .col-md-6 {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Adjust the form content */
+.col-md-6.ms-0 .tab-content {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+/* Adjust the image alignment */
+.col-md-6.me-0 img {
+    margin-left: 0;
+    margin-right: 0;
 }
