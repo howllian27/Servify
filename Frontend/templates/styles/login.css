@@ -19,8 +19,9 @@ form {
 
 #ex1 {
     margin-top: 80px;
+    margin-left: 40px;
     display: flex;
-    justify-content: center;
+    justify-content: left;
 }
 
 
@@ -83,10 +84,13 @@ form {
     z-index: 1;
 }
 
+.img-fluid {
+    justify-content: right;
+}
+
 .tab-content {
-    width: 100%;
-    max-width: 500px;
-    margin: 0 auto;
+    max-width: 700px;
+    padding-left: 50px;
 }
 
 
@@ -127,4 +131,3 @@ form input, form label, form button, form a {
     background-color: #2AC0A5;
     border-color: #2AC0A5;
 }
-
