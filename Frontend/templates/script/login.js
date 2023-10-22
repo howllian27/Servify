@@ -33,6 +33,7 @@ function isValidPassword(password) {
   return passwordRegex.test(password);
 }
 
+// Sign up function
 async function signUp(event) {
   event.preventDefault();
   console.log("signUp function called");
