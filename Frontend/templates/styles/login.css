@@ -158,3 +158,12 @@ form input, form label, form button, form a {
     margin-left: 0;
     margin-right: 0;
 }
+
+#tab-login {
+    margin-right: 20px; /* Adjust this value as needed */
+}
+
+/* Increase the margin-top for the pills container */
+.nav.nav-pills {
+    margin-top: 20px; /* Adjust this value as needed */
+}
