@@ -33,7 +33,7 @@ function isValidPassword(password) {
   return passwordRegex.test(password);
 }
 
-function signUp(event) {
+async function signUp(event) {
   event.preventDefault();
   console.log("signUp function called");
 
@@ -64,6 +64,23 @@ function signUp(event) {
   //Check whether password is valid
   if (!isValidPassword(password)) {
       alert("Password must contain at least 1 capital letter, 1 digit, and 1 special character!");
+      return;
+  }
+
+  // Check if email or username already exists
+  const emailQuery = query(collection(db, 'User_details'), where('email', '==', email));
+  const usernameQuery = query(collection(db, 'User_details'), where('username', '==', username));
+
+  const emailSnapshot = await getDocs(emailQuery);
+  const usernameSnapshot = await getDocs(usernameQuery);
+
+  if (!usernameSnapshot.empty) {
+    alert("Username already exists!");
+    return;
+}
+
+  if (!emailSnapshot.empty) {
+      alert("Email already exists!");
       return;
   }
 
