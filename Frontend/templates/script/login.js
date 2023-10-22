@@ -110,6 +110,12 @@ async function signIn(event) {
   const password = document.getElementById("loginPassword").value;
   console.log("signIn function called");
 
+  if (!password || !username) {
+    alert("All fields must be filled out!");
+    return;
+}
+
+
   try {
       // Check if user exists in Firestore
       const q = query(collection(db, 'User_details'), where('username', '==', username), where('password', '==', password));
