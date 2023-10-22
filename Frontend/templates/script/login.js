@@ -113,17 +113,27 @@ async function signIn(event) {
   if (!password || !username) {
     alert("All fields must be filled out!");
     return;
-}
-
+  }
 
   try {
-      // Check if user exists in Firestore
-      const q = query(collection(db, 'User_details'), where('username', '==', username), where('password', '==', password));
-      const querySnapshot = await getDocs(q);
-      if (querySnapshot.empty) {
-          alert("No matching users found.");
+      // Check if username exists in Firestore
+      const usernameQuery = query(collection(db, 'User_details'), where('username', '==', username));
+      const usernameSnapshot = await getDocs(usernameQuery);
+
+      if (usernameSnapshot.empty) {
+          alert("Invalid username.");
           return;
       }
+
+      // Check if password matches the one associated with the username
+      const passwordQuery = query(collection(db, 'User_details'), where('username', '==', username), where('password', '==', password));
+      const passwordSnapshot = await getDocs(passwordQuery);
+
+      if (passwordSnapshot.empty) {
+          alert("Invalid password.");
+          return;
+      }
+
       alert("User signed in successfully!");
       window.location.href = "services.html"; 
   } catch (error) {
@@ -131,6 +141,7 @@ async function signIn(event) {
       alert(errorMessage);
   }
 }
+
 
 document.addEventListener("DOMContentLoaded", function() {
   console.log("Event listeners attached");
