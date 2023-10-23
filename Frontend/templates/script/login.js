@@ -104,6 +104,7 @@ async function signUp(event) {
   });
 }
 
+// Check whether user details exist in Firestore
 async function signIn(event) {
   event.preventDefault();
 
@@ -143,7 +144,7 @@ async function signIn(event) {
   }
 }
 
-
+// Event listeners for whether buttons are clicked
 document.addEventListener("DOMContentLoaded", function() {
   console.log("Event listeners attached");
 
@@ -160,6 +161,7 @@ document.addEventListener("DOMContentLoaded", function() {
   }
 });
 
+// Switch from register to login tab
 function switchToLoginTab() {
   const loginTab = document.getElementById("tab-login");
   const registerTab = document.getElementById("tab-register"); // Get the register tab
