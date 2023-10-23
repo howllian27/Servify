@@ -110,7 +110,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Check before proceeding
     submitButton.addEventListener('click', function(event) {
-        const isAnyButtonSelected = Array.from(timingButtons).some(button => button.checked);
+        const isAnyButtonSelected = Array.from(document.querySelectorAll('input[name="timing"]')).some(button => button.checked);
         if (!isAnyButtonSelected) {
             event.preventDefault();
             alert('Please select at least one time slot before proceeding.');
@@ -120,6 +120,23 @@ document.addEventListener('DOMContentLoaded', function () {
     updateSubmitButton();
 });
 
+// Get references to the radio buttons and the submit button
+const radioButtons = document.querySelectorAll('input[type="radio"]');
+const submitButton = document.getElementById('submitButton');
+
+// Function to check if any radio button is selected
+function checkRadioButtons() {
+const isAnyRadioButtonSelected = Array.from(radioButtons).some((radio) => radio.checked);
+submitButton.disabled = !isAnyRadioButtonSelected;
+}
+
+// Add event listeners to the radio buttons
+radioButtons.forEach((radioButton) => {
+    radioButton.addEventListener('change', checkRadioButtons);
+});
+
+// Disable the submit button by default
+submitButton.disabled = true;
 
 // timer
 function sleep(ms) {
@@ -222,6 +239,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
     submitButton.addEventListener('click', async function (event) {
         event.preventDefault();
+
+        
+        if (!isAnyButtonSelected) {
+            alert('Please select at least one time slot before proceeding.');
+            return; // Exit the function if no time slot is selected
+        }
+
 
         // Show loading popup
         const loadingPopup = document.getElementById("loading-popup");
