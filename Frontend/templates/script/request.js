@@ -233,6 +233,11 @@ function monitorAcceptedResponses() {
     });
 }
 
+function isTimeSlotSelected() {
+    return Array.from(document.querySelectorAll('input[name="timing"]')).some(button => button.checked);
+}
+
+
 // Send JSON Data and filter service providers based on location
 document.addEventListener("DOMContentLoaded", function () {
     const submitButton = document.getElementById('submitButton');
@@ -241,7 +246,7 @@ document.addEventListener("DOMContentLoaded", function () {
         event.preventDefault();
 
         
-        if (!isAnyButtonSelected) {
+        if (!isTimeSlotSelected()) {
             alert('Please select at least one time slot before proceeding.');
             return; // Exit the function if no time slot is selected
         }
