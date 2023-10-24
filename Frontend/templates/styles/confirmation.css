@@ -1,3 +1,9 @@
+.confirm-button {
+    background-color: #2AC0A5;
+    width: 300px;
+    max-width: 100%; /* Makes sure the button doesn't overflow on smaller screens */
+}
+
 .navbar-brand-container {
     margin-left: 20px;
 }
