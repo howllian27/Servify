@@ -32,8 +32,7 @@ function initMap() {
         navigator.geolocation.getCurrentPosition(function(position) {
             const userLat = position.coords.latitude;
             const userLng = position.coords.longitude;
-            let serviceProviderLocation = getRandomLocationNearUser(userLat, userLng); // Set service provider to a random location near the user
-            const customerLocation = { lat: userLat, lng: userLng }; // Set customer to the user's location
+            let serviceProviderLocation = getRandomLocationNearUser(userLat, userLng);
 
             const map = new google.maps.Map(document.getElementById('map'), {
                 zoom: 12,
@@ -43,74 +42,57 @@ function initMap() {
             const serviceProviderMarker = new google.maps.Marker({
                 position: serviceProviderLocation,
                 map: map,
-                icon: 'http://maps.google.com/mapfiles/ms/icons/red-dot.png' // Red marker for service provider
+                icon: 'http://maps.google.com/mapfiles/ms/icons/red-dot.png'
             });
 
             const customerMarker = new google.maps.Marker({
-                position: customerLocation,
+                position: { lat: userLat, lng: userLng },
                 map: map,
-                icon: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png' // Blue marker for customer
+                icon: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png'
             });
 
             const directionsService = new google.maps.DirectionsService();
-            const directionsRenderer = new google.maps.DirectionsRenderer({ suppressMarkers: true });
-            directionsRenderer.setMap(map);
-            
-            let originalPath = [];
-            let pathPolyline = null; 
-            let currentIndex = 0;
+            let pathPolyline = new google.maps.Polyline({
+                geodesic: true,
+                strokeColor: '#FF0000',
+                strokeOpacity: 1.0,
+                strokeWeight: 2,
+                map: map
+            });
 
-            function updateRoute() {
-                const request = {
-                    origin: serviceProviderLocation,
-                    destination: customerLocation,
-                    travelMode: 'WALKING',
-                };
-                directionsService.route(request, function(response, status) {
-                    if (status === 'OK') {
-                        originalPath = response.routes[0].overview_path;
-                        if (pathPolyline) {
-                            pathPolyline.setMap(null); 
+            const request = {
+                origin: serviceProviderLocation,
+                destination: { lat: userLat, lng: userLng },
+                travelMode: 'WALKING',
+            };
+
+            directionsService.route(request, function(response, status) {
+                if (status === 'OK') {
+                    let path = response.routes[0].overview_path;
+                    pathPolyline.setPath(path);
+
+                    let currentIndex = 0;
+                    const interval = setInterval(() => {
+                        if (currentIndex < path.length) {
+                            serviceProviderLocation = {
+                                lat: path[currentIndex].lat(),
+                                lng: path[currentIndex].lng()
+                            };
+                            serviceProviderMarker.setPosition(serviceProviderLocation);
+                            currentIndex++;
+
+                            // Update the path to only show the remaining path
+                            path = path.slice(currentIndex);
+                            pathPolyline.setPath(path);
+                        } else {
+                            clearInterval(interval);
+                            console.log("Service provider has reached the customer!");
                         }
-                        pathPolyline = new google.maps.Polyline({
-                            path: originalPath,
-                            geodesic: true,
-                            strokeColor: '#FF0000',
-                            strokeOpacity: 1.0,
-                            strokeWeight: 2
-                        });
-                        pathPolyline.setMap(map);
-                    } else {
-                        console.error('Directions request failed due to ' + status);
-                    }
-                });
-            }
-
-            updateRoute();
-
-            const interval = setInterval(() => {
-                if (currentIndex < originalPath.length) {
-                    serviceProviderLocation = {
-                        lat: originalPath[currentIndex].lat(),
-                        lng: originalPath[currentIndex].lng()
-                    };
-                    serviceProviderMarker.setPosition(serviceProviderLocation);
-                    currentIndex++;
-
-                    const newPath = originalPath.slice(currentIndex);
-                    pathPolyline.setPath(newPath); 
-
-                    const distanceToCustomer = calculateDistance(serviceProviderLocation.lat, serviceProviderLocation.lng, customerLocation.lat, customerLocation.lng);
-                    if (distanceToCustomer < 0.1) {
-                        clearInterval(interval);
-                        console.log("Service provider has reached the customer!");
-                    }
+                    }, 1000);
                 } else {
-                    clearInterval(interval);
-                    console.log("Service provider has reached the customer!");
+                    console.error('Directions request failed due to ' + status);
                 }
-            }, 1000);
-
+            });
         }, function(error) {
             console.error("Error retrieving user location:", error);
         });
