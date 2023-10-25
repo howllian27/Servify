@@ -63,7 +63,7 @@ function initMap() {
             const request = {
                 origin: serviceProviderLocation,
                 destination: { lat: userLat, lng: userLng },
-                travelMode: 'WALKING',
+                travelMode: 'DRIVING',
             };
 
             directionsService.route(request, function(response, status) {
