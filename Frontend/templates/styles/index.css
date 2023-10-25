@@ -11,8 +11,8 @@
     flex-wrap: wrap;
 }
 .service-btn:hover {
-    background-color: #2A80A5;
-    color: #2A20A5;
+    background-color: #006400;
+    color: #f8f9fa;
 }
 .service-btn {
     background-color: white;
