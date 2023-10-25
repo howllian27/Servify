@@ -334,7 +334,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
                     if (flag) {
                         try {
-                            const response = await emailjs.send("service_ar6wyrk", "template_kj1pifv", {
+                            const response = await emailjs.send("service_ar6wyrk", "template_w2ectv8v", {
                                 serviceProviderName: provider.service_provider_name,
                                 serviceType: provider.service_requested,
                                 selectedTime: selectedTime,

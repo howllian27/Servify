@@ -63,7 +63,7 @@ function initMap() {
             const request = {
                 origin: serviceProviderLocation,
                 destination: { lat: userLat, lng: userLng },
-                travelMode: 'DRIVING',
+                travelMode: 'WALKING',
             };
 
             directionsService.route(request, function(response, status) {
@@ -88,7 +88,7 @@ function initMap() {
                             clearInterval(interval);
                             console.log("Service provider has reached the customer!");
                         }
-                    }, 1000);
+                    }, 2000);
                 } else {
                     console.error('Directions request failed due to ' + status);
                 }
