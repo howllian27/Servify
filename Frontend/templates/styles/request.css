@@ -43,8 +43,8 @@ h1 {
   }
 
 .upload-button:hover {
-    background-color: #2A80A5;
-    color: #2A20A5;
+    background-color: #006400;
+    color: #f8f9fa;
 }
 
 .timing-button {
@@ -54,8 +54,8 @@ h1 {
 }
 
 .timing-button:hover {
-  background-color: #2A80A5;
-  color: #2A20A5;
+  background-color: #006400;
+  color: #f8f9fa;
 }
   
 .image-preview {
