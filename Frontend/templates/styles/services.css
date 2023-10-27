@@ -26,6 +26,11 @@ h2 {
     width: 150px;
 }
 
+.next-button:hover {
+    background-color: #006400;
+    color: #f8f9fa;
+}
+
 body {
     display: flex;
     flex-direction: column;
