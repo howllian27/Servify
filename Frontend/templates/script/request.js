@@ -17,15 +17,24 @@ const database = getDatabase(app);
 
 emailjs.init("oqcrp_MJgCRFTuFxL");
 
-//Image Upload Functionality
+// Image Upload Functionality
 document.getElementById("imageUpload").addEventListener("change", function() {
     const file = this.files[0];
     if (file) {
-        const reader = new FileReader();
-        reader.onload = function(event) {
-            document.getElementById("imagePreview").innerHTML = `<img src="${event.target.result}" alt="Uploaded Image">`;
+        // Extract the file extension
+        const fileExtension = file.name.split('.').pop().toLowerCase();
+
+        // Check if the file extension is one of the allowed types
+        if (['jpg', 'jpeg', 'png'].includes(fileExtension)) {
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                document.getElementById("imagePreview").innerHTML = `<img src="${event.target.result}" alt="Uploaded Image">`;
+            }
+            reader.readAsDataURL(file);
+        } else {
+            // Display an error alert if the file is not an allowed type
+            alert("Please upload an image file (jpg, jpeg, or png).");
         }
-        reader.readAsDataURL(file);
     }
 });
 
@@ -38,7 +47,6 @@ document.addEventListener("DOMContentLoaded", function () {
     let serviceProviderData = JSON.parse(localStorage.getItem('serviceProviderData')); // Retrieve the data from localStorage
     console.log(serviceProviderData); // This should log the array of JSON objects if the first script has run and stored the data
 });
-
 
 // Function to check if any time slot button is selected
 function checkTimeSlots() {
@@ -144,6 +152,7 @@ function sleep(ms) {
 }
 
 // Function to generate a random latitude and longitude
+// Function to generate a random latitude and longitude
 function getRandomLocationNearUser() {
     return new Promise((resolve, reject) => {
         if (navigator.geolocation) {
@@ -159,13 +168,25 @@ function getRandomLocationNearUser() {
 
                 resolve(randomLocation);
             }, function(error) {
-                reject(error);
+                if (error.code === error.PERMISSION_DENIED) {
+                    // User denied the request for Geolocation
+                    alert("Service cannot continue as the service provider won't be able to find your location. Please allow location access.");
+                    // Ask for location permission again or redirect to homepage
+                    if (confirm("Do you want to try allowing location access again?")) {
+                        getRandomLocationNearUser(); // Try to get location again
+                    } else {
+                        window.location.href = "index.html"; // Redirect to homepage
+                    }
+                } else {
+                    reject(error);
+                }
             });
         } else {
             reject(new Error("Geolocation is not supported by this browser."));
         }
     });
 }
+
 
 // Function to calculate distance between two points using Haversine formula
 function calculateDistance(lat1, lon1, lat2, lon2) {
