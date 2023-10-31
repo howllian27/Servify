@@ -21,6 +21,16 @@ const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 const db = getFirestore(app);
 
+function isValidName(name) {
+  const nameRegex = /^[A-Za-z\s]+$/;
+  return nameRegex.test(name);
+}
+
+
+function isValidUsername(username) {
+
+}
+
 // Check email format
 function isValidEmail(email) {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -50,6 +60,18 @@ async function signUp(event) {
       return;
   }
 
+  //Check whether name is valid
+  if (!isValidName(name)) {
+    alert("Invalid name format!");
+    return;
+  }
+
+  //Check whether username is valid
+  if (!isValidUserName(username)) {
+    alert("Invalid username format!");
+    return;
+  }
+
   //Check whether email is valid
   if (!isValidEmail(email)) {
       alert("Invalid email format!");
@@ -64,7 +86,7 @@ async function signUp(event) {
 
   //Check whether password is valid
   if (!isValidPassword(password)) {
-      alert("Password must contain at least 1 capital letter, 1 digit, and 1 special character!");
+      alert("Invalid password format!");
       return;
   }
 
@@ -132,7 +154,7 @@ async function signIn(event) {
       const passwordSnapshot = await getDocs(passwordQuery);
 
       if (passwordSnapshot.empty) {
-          alert("Invalid password.");
+          alert("Invalid password!");
           return;
       }
 

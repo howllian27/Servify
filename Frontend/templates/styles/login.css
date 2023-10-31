@@ -167,3 +167,11 @@ form input, form label, form button, form a {
 .nav.nav-pills {
     margin-top: 20px; /* Adjust this value as needed */
 }
+
+.nav-pills .nav-link {
+    color: black; /* Default color */
+}
+
+.nav-pills .nav-link.active {
+    color: white; /* Active tab color */
+}
