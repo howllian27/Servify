@@ -143,6 +143,10 @@ function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
+function handleLocationPermissionDenied() {
+    alert("Location access is required for this service. Please enable location permissions in your browser settings and try again.");
+}
+
 // Function to generate a random latitude and longitude
 function getRandomLocationNearUser() {
     return new Promise((resolve, reject) => {
@@ -159,7 +163,11 @@ function getRandomLocationNearUser() {
 
                 resolve(randomLocation);
             }, function(error) {
-                reject(error);
+                if (error.code === error.PERMISSION_DENIED) {
+                    handleLocationPermissionDenied();
+                } else {
+                    console.error("Error in getting location: ", error.message);
+                }
             });
         } else {
             reject(new Error("Geolocation is not supported by this browser."));
