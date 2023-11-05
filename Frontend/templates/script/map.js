@@ -19,6 +19,7 @@ function calculateDistance(lat1, lon1, lat2, lon2) {
     return distance; // Returns distance in kilometers
 }
 
+// get random location near user
 function getRandomLocationNearUser(lat, lng) {
     const maxDistanceInDegrees = 5 / 111;  // Approximate value for 5km in degrees
     return {
@@ -27,30 +28,37 @@ function getRandomLocationNearUser(lat, lng) {
     };
 }
 
+// Initialise map
 function initMap() {
+    // Check if geolocation is supported by the browser
     if (navigator.geolocation) {
+        // Get user's current location
         navigator.geolocation.getCurrentPosition(function(position) {
             const userLat = position.coords.latitude;
             const userLng = position.coords.longitude;
             let serviceProviderLocation = getRandomLocationNearUser(userLat, userLng);
 
+            // Calculate distance between user and service provider
             const map = new google.maps.Map(document.getElementById('map'), {
                 zoom: 12,
                 center: serviceProviderLocation,
             });
 
+            // Add markers to the map
             const serviceProviderMarker = new google.maps.Marker({
                 position: serviceProviderLocation,
                 map: map,
                 icon: 'http://maps.google.com/mapfiles/ms/icons/red-dot.png'
             });
 
+            // Add markers to the map
             const customerMarker = new google.maps.Marker({
                 position: { lat: userLat, lng: userLng },
                 map: map,
                 icon: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png'
             });
 
+            // Add a polyline to the map
             const directionsService = new google.maps.DirectionsService();
             let pathPolyline = new google.maps.Polyline({
                 geodesic: true,

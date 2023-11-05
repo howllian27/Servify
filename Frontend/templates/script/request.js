@@ -145,6 +145,8 @@ function sleep(ms) {
 
 function handleLocationPermissionDenied() {
     alert("Location access is required for this service. Please enable location permissions in your browser settings and try again.");
+    // Redirect to home page after alert
+    window.location.href = "./home.html";
 }
 
 // Function to generate a random latitude and longitude

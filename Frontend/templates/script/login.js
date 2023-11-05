@@ -27,9 +27,12 @@ function isValidName(name) {
 }
 
 
-function isValidUsername(username) {
-
+function isValidUserName(username) {
+  // Regular expression to check for at least one alphabet and one number
+  const usernameRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]+$/;
+  return usernameRegex.test(username);
 }
+
 
 // Check email format
 function isValidEmail(email) {
