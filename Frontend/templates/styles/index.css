@@ -30,7 +30,7 @@
     min-height: 300px;
 }
 .carousel-caption{
-    bottom: 275px;
+    bottom: 400px;
     z-index: 2;
 }
 .carousel-caption h5{
@@ -40,7 +40,7 @@
     margin-top: 25px;
 }
 .carousel-caption p{
-    width: 60%;
+    width: 80%;
     margin: auto;
     font-size: 18px;
     line-height: 1.9;
