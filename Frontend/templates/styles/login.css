@@ -116,6 +116,7 @@ footer {
 
 .nav-pills .nav-link:hover {
     background-color: #1B9078;
+    font-weight: bold;
 }
 
 .btn-primary {
@@ -126,6 +127,7 @@ footer {
 .btn-primary:hover, .btn-primary:focus, .btn-primary:active {
     background-color: #1B9078;
     border-color: #1B9078;
+    font-weight: bold;
 }
 
 .btn-block {
