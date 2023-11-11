@@ -1,7 +1,6 @@
 import express from 'express';
 import path from 'path';
 
-// const db = require('./firebaseAdminConfig');
 const app = express();
 const port = process.env.PORT || 3000;
 

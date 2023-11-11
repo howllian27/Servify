@@ -1,6 +1,5 @@
 import admin from 'firebase-admin';
-
-const serviceAccount = require('./path-to-your-firebase-adminsdk-json'); // Replace with the path to your Firebase Admin SDK JSON file
+import serviceAccount from './path-to-your-firebase-adminsdk-json'; // Replace with the path to your Firebase Admin SDK JSON file
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
