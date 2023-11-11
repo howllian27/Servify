@@ -1,5 +1,6 @@
 const express = require('express');
 const path = require('path');
+const db = require('./firebaseAdminConfig');
 const app = express();
 const port = process.env.PORT || 3000;
 
@@ -43,4 +44,51 @@ app.get('/', (req, res) => {
   app.use((req, res) => {
     res.status(404).send('404: Page not found');
   });
+
+
+  app.use(bodyParser.json());
+
+// Firebase Database Reference
+const db = firebase.database();
+
+// Send an email using EmailJS
+app.post('/api/send-email', async (req, res) => {
+  try {
+    const emailResponse = await sendEmail(req.body);
+    res.json({ message: 'Email sent successfully', response: emailResponse });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.listen(port, () => {
+  console.log(`Server running at http://localhost:${port}`);
+});
+
+
+// Fetch data from Firebase
+// Example route to fetch data from Firebase
+app.get('/api/data', (req, res) => {
+    const ref = db.ref('your-data-path');
+    ref.once('value', (snapshot) => {
+      res.json(snapshot.val());
+    }, (error) => {
+      res.status(500).json({ error: error.message });
+    });
+  });
   
+  // Example route to post data to Firebase
+  app.post('/api/data', (req, res) => {
+    const ref = db.ref('your-data-path');
+    ref.push(req.body, (error) => {
+      if (error) {
+        res.status(500).json({ error: error.message });
+      } else {
+        res.json({ message: 'Data saved successfully' });
+      }
+    });
+  });
+  
+  app.listen(port, () => {
+    console.log(`Server running at http://localhost:${port}`);
+  });
