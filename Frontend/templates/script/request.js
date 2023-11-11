@@ -349,7 +349,7 @@ document.addEventListener("DOMContentLoaded", function () {
                                 serviceType: provider.service_requested,
                                 selectedTime: selectedTime,
                                 userLocation: readableAddress,
-                                linkToDetailsPage: "https://jolly-starship-575b22.netlify.app/frontend/templates/pages/provider"
+                                linkToDetailsPage: "http://localhost:3000/provider"
                             });
 
                             flag = false;
