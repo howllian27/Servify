@@ -223,7 +223,7 @@ function hideLoadingScreen() {
     }
 
     // Redirect to map.html
-    window.location.href = "./map.html";
+    window.location.href = "/map";
 }
 
 // Global variable to store the initial count of accepted responses

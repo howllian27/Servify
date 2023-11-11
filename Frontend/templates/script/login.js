@@ -162,7 +162,7 @@ async function signIn(event) {
       }
 
       alert("User signed in successfully!");
-      window.location.href = "services.html"; 
+      window.location.href = "/services"; 
   } catch (error) {
       const errorMessage = error.message;
       alert(errorMessage);

@@ -1,6 +1,6 @@
 const express = require('express');
 const path = require('path');
-const db = require('./firebaseAdminConfig');
+// const db = require('./firebaseAdminConfig');
 const app = express();
 const port = process.env.PORT || 3000;
 
@@ -16,40 +16,37 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'Frontend/templates/pages/index.html'));
   });
   
-  // Add routes for other HTML pages
-  app.get('/login', (req, res) => {
-    res.sendFile(path.join(__dirname, 'Frontend/templates/pages/login.html'));
-  });
-  
-  app.get('/confirmation', (req, res) => {
-    res.sendFile(path.join(__dirname, 'Frontend/templates/pages/confirmation.html'));
-  });
-  
-  app.get('/map', (req, res) => {
-    res.sendFile(path.join(__dirname, 'Frontend/templates/pages/map.html'));
-  });
-  
-  app.get('/provider', (req, res) => {
-    res.sendFile(path.join(__dirname, 'Frontend/templates/pages/provider.html'));
-  });
-  
-  app.get('/request', (req, res) => {
-    res.sendFile(path.join(__dirname, 'Frontend/templates/pages/request.html'));
-  });
-  
-  app.get('/services', (req, res) => {
-    res.sendFile(path.join(__dirname, 'Frontend/templates/pages/services.html'));
-  });
+// Add routes for other HTML pages
+app.get('/login', (req, res) => {
+res.sendFile(path.join(__dirname, 'Frontend/templates/pages/login.html'));
+});
 
-  app.use((req, res) => {
-    res.status(404).send('404: Page not found');
-  });
+app.get('/confirmation', (req, res) => {
+res.sendFile(path.join(__dirname, 'Frontend/templates/pages/confirmation.html'));
+});
+
+app.get('/map', (req, res) => {
+res.sendFile(path.join(__dirname, 'Frontend/templates/pages/map.html'));
+});
+
+app.get('/provider', (req, res) => {
+res.sendFile(path.join(__dirname, 'Frontend/templates/pages/provider.html'));
+});
+
+app.get('/request', (req, res) => {
+res.sendFile(path.join(__dirname, 'Frontend/templates/pages/request.html'));
+});
+
+app.get('/services', (req, res) => {
+res.sendFile(path.join(__dirname, 'Frontend/templates/pages/services.html'));
+});
+
+app.use((req, res) => {
+res.status(404).send('404: Page not found');
+});
 
 
-  app.use(bodyParser.json());
-
-// Firebase Database Reference
-const db = firebase.database();
+//   app.use(bodyParser.json());
 
 // Send an email using EmailJS
 app.post('/api/send-email', async (req, res) => {
@@ -61,34 +58,26 @@ app.post('/api/send-email', async (req, res) => {
   }
 });
 
-app.listen(port, () => {
-  console.log(`Server running at http://localhost:${port}`);
-});
-
 
 // Fetch data from Firebase
 // Example route to fetch data from Firebase
-app.get('/api/data', (req, res) => {
-    const ref = db.ref('your-data-path');
-    ref.once('value', (snapshot) => {
-      res.json(snapshot.val());
-    }, (error) => {
-      res.status(500).json({ error: error.message });
-    });
-  });
+// app.get('/api/data', (req, res) => {
+//     const ref = db.ref('your-data-path');
+//     ref.once('value', (snapshot) => {
+//       res.json(snapshot.val());
+//     }, (error) => {
+//       res.status(500).json({ error: error.message });
+//     });
+//   });
   
-  // Example route to post data to Firebase
-  app.post('/api/data', (req, res) => {
-    const ref = db.ref('your-data-path');
-    ref.push(req.body, (error) => {
-      if (error) {
-        res.status(500).json({ error: error.message });
-      } else {
-        res.json({ message: 'Data saved successfully' });
-      }
-    });
-  });
-  
-  app.listen(port, () => {
-    console.log(`Server running at http://localhost:${port}`);
-  });
+//   // Example route to post data to Firebase
+//   app.post('/api/data', (req, res) => {
+//     const ref = db.ref('your-data-path');
+//     ref.push(req.body, (error) => {
+//       if (error) {
+//         res.status(500).json({ error: error.message });
+//       } else {
+//         res.json({ message: 'Data saved successfully' });
+//       }
+//     });
+//   });

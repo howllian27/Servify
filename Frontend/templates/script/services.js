@@ -80,7 +80,7 @@ function findMatchingUsers(service) {
             // If you want to use this data in another JS file, you can set it to a global variable or use other methods like LocalStorage, etc.
             window.serviceProviderData = results; // Setting to a global variable
             localStorage.setItem('serviceProviderData', JSON.stringify(results));
-            sleep(2500).then(() => { window.location.href = "./request.html"; });
+            sleep(2500).then(() => { window.location.href = "/request"; });
         })
         .catch((error) => {
             console.log("Error getting documents: ", error);
