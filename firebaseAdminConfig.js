@@ -1,4 +1,4 @@
-const admin = require('firebase-admin');
+import admin from 'firebase-admin';
 
 const serviceAccount = require('./path-to-your-firebase-adminsdk-json'); // Replace with the path to your Firebase Admin SDK JSON file
 

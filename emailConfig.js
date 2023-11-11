@@ -1,4 +1,4 @@
-const axios = require('axios');
+import axios from "axios";
 
 const emailjsUserID = 'YOUR_EMAILJS_USER_ID';
 const serviceID = 'YOUR_EMAILJS_SERVICE_ID';
