@@ -49,14 +49,14 @@ res.status(404).send('404: Page not found');
 //   app.use(bodyParser.json());
 
 // Send an email using EmailJS
-app.post('/api/send-email', async (req, res) => {
-  try {
-    const emailResponse = await sendEmail(req.body);
-    res.json({ message: 'Email sent successfully', response: emailResponse });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
+// app.post('/api/send-email', async (req, res) => {
+//   try {
+//     const emailResponse = await sendEmail(req.body);
+//     res.json({ message: 'Email sent successfully', response: emailResponse });
+//   } catch (error) {
+//     res.status(500).json({ error: error.message });
+//   }
+// });
 
 
 // Fetch data from Firebase
